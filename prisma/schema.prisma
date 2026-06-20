@@ -1,0 +1,384 @@
+// Prisma schema for Expense Tracker — MongoDB provider
+// Adapted from the original PostgreSQL schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// ─── USER ───────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String   @unique
+  passwordHash String
+  avatarUrl    String?
+  upiId        String?
+  budgets         Json?    // { "FOOD": 500000, "TRANSPORT": 200000 } in paise
+  preferences     Json?    // { currency: 'INR', emailNotifications: true, weeklyDigest: false }
+  isEmailVerified Boolean  @default(false)
+  isAdmin         Boolean  @default(false)
+  uniqueId        String   @unique @default(cuid())
+  handle          String?  @unique
+  createdAt       DateTime @default(now())
+  loginCount      Int      @default(0)
+  lastActiveAt    DateTime @default(now())
+
+  personalExpenses PersonalExpense[]
+  groupMembers     GroupMember[]
+  expensesCreated  GroupExpense[]
+  expensesPaid     ExpenseContributor[]
+  expenseSplits    ExpenseSplit[]
+  recurringExpensesCreated RecurringExpense[]
+  settlementsPaid  Settlement[]    @relation("SettlementFrom")
+  settlementsRcvd  Settlement[]    @relation("SettlementTo")
+
+  // Added for House defaults editing and fixed costs creation
+  houseFixedCosts  HouseFixedCost[]
+  notifications             Notification[]
+  auditLogs                 AuditLog[]
+  refreshTokens             RefreshToken[]
+  emailVerificationTokens   EmailVerificationToken[]
+  sentFriendRequests        FriendRequest[] @relation("RequestFrom")
+  receivedFriendRequests    FriendRequest[] @relation("RequestTo")
+}
+
+// ─── AUTH ────────────────────────────────────────────────
+
+model RefreshToken {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  token     String   @unique
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model PasswordResetToken {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  tokenHash String   @unique
+  userId    String   @db.ObjectId
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  token     String
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+// ─── PERSONAL EXPENSES ──────────────────────────────────
+
+model PersonalExpense {
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String          @db.ObjectId
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  amountPaise Int             // stored in paise (1 INR = 100 paise)
+  category    ExpenseCategory
+  date        DateTime
+  receiptUrl  String?
+  tags        String[]        // free-form tags
+  groupId     String?         @db.ObjectId // optional: link to a group for context only
+  group       Group?          @relation(fields: [groupId], references: [id])
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+// ─── GROUPS ─────────────────────────────────────────────
+
+model Group {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  type        GroupType
+  description String?
+  currency    String    @default("INR")
+  inviteCode  String    @unique
+  createdById String    @db.ObjectId
+  createdAt   DateTime  @default(now())
+
+  members           GroupMember[]
+  expenses          GroupExpense[]
+  settlements       Settlement[]
+  recurringExpenses RecurringExpense[]
+  personalExpenses  PersonalExpense[] // personal expenses tagged to this group
+
+  // House-specific relations
+  houseConfig      Json?
+  houseFixedCosts  HouseFixedCost[]
+  houseMonthCloses HouseMonthClose[]
+}
+
+enum GroupType {
+  FLATMATES
+  TRIP
+  SPORTS
+  OFFICE
+  FAMILY
+  OTHER
+  HOUSE
+  FRIENDS
+}
+
+// MongoDB doesn't support composite IDs — use generated ID + unique constraint
+model GroupMember {
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  groupId  String     @db.ObjectId
+  userId   String     @db.ObjectId
+  group    Group      @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role     MemberRole @default(MEMBER)
+  joinedAt DateTime   @default(now())
+
+  // House-specific fields
+  isActive      Boolean @default(true)
+  houseDefaults Json?   // { "GROCERIES": true, "FOOD": false }
+
+  @@unique([groupId, userId])
+}
+
+enum MemberRole {
+  ADMIN
+  MEMBER
+  HEAD
+}
+
+// ─── GROUP EXPENSES ─────────────────────────────────────
+
+model GroupExpense {
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  groupId     String          @db.ObjectId
+  group       Group           @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  totalPaise  Int
+  category    ExpenseCategory
+  splitType   SplitType
+  date        DateTime
+  receiptUrl  String?
+  createdById String          @db.ObjectId
+  createdBy   User            @relation(fields: [createdById], references: [id])
+  status      ExpenseStatus   @default(PENDING)
+  isDeleted   Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  contributors ExpenseContributor[]
+  splits       ExpenseSplit[]
+}
+
+enum SplitType {
+  EQUAL
+  EXACT
+  PERCENTAGE
+  SHARES
+}
+
+model ExpenseContributor {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  expenseId   String       @db.ObjectId
+  userId      String       @db.ObjectId
+  expense     GroupExpense  @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id])
+  amountPaise Int
+
+  @@unique([expenseId, userId])
+}
+
+model ExpenseSplit {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  expenseId   String       @db.ObjectId
+  userId      String       @db.ObjectId
+  expense     GroupExpense  @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  user        User         @relation(fields: [userId], references: [id])
+  amountPaise Int
+  percentage  Float?
+  shares      Int?
+
+  @@unique([expenseId, userId])
+}
+
+// ─── SETTLEMENTS ────────────────────────────────────────
+
+model Settlement {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  groupId     String   @db.ObjectId
+  group       Group    @relation(fields: [groupId], references: [id])
+  fromUserId  String   @db.ObjectId
+  toUserId    String   @db.ObjectId
+  fromUser    User     @relation("SettlementFrom", fields: [fromUserId], references: [id])
+  toUser      User     @relation("SettlementTo", fields: [toUserId], references: [id])
+  amountPaise Int
+  note        String?
+  status      SettlementStatus @default(PENDING)
+  date        DateTime
+  createdAt   DateTime @default(now())
+}
+
+// ─── RECURRING EXPENSES ─────────────────────────────────
+
+model RecurringExpense {
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  groupId     String          @db.ObjectId
+  group       Group           @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  title       String
+  totalPaise  Int
+  category    ExpenseCategory
+  splitType   SplitType
+  splitConfig Json            // stores contributors and splits config
+  frequency   Frequency
+  nextDue     DateTime
+  isActive    Boolean         @default(true)
+  createdById String          @db.ObjectId
+  createdBy   User            @relation(fields: [createdById], references: [id])
+  createdAt   DateTime        @default(now())
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+// ─── NOTIFICATIONS ──────────────────────────────────────
+
+model Notification {
+  id               String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String           @db.ObjectId
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type             NotificationType
+  message          String
+  isRead           Boolean          @default(false)
+  relatedGroupId   String?          @db.ObjectId
+  relatedExpenseId String?          @db.ObjectId
+  createdAt        DateTime         @default(now())
+}
+
+enum NotificationType {
+  EXPENSE_ADDED
+  EXPENSE_EDITED
+  EXPENSE_DELETED
+  SETTLEMENT_RECORDED
+  SETTLEMENT_ACCEPTED
+  SETTLEMENT_DISPUTED
+  MEMBER_JOINED
+  MEMBER_REMOVED
+  RECURRING_GENERATED
+  GROUP_INVITE
+  HOUSE_EXPENSE_ADDED
+  MONTH_FINALIZED
+}
+
+// ─── AUDIT LOG ──────────────────────────────────────────
+
+model AuditLog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  groupId   String?  @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  metadata  Json
+  createdAt DateTime @default(now())
+}
+
+// ─── ENUMS ──────────────────────────────────────────────
+
+enum ExpenseCategory {
+  FOOD
+  GROCERIES
+  UTILITIES
+  RENT
+  TRANSPORT
+  ENTERTAINMENT
+  HEALTH
+  SHOPPING
+  TRAVEL
+  SPORTS
+  MISC
+}
+
+enum ExpenseStatus {
+  PENDING
+  ACCEPTED
+  DISPUTED
+}
+
+enum SettlementStatus {
+  PENDING
+  ACCEPTED
+  DISPUTED
+}
+
+// ─── RATE LIMITING ──────────────────────────────────────
+
+model RateLimit {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  key       String   @unique // e.g. "login:192.168.1.1" or "login:user@email.com"
+  count     Int      @default(0)
+  resetAt   DateTime
+  createdAt DateTime @default(now())
+}
+
+// ─── HOUSES MODULE (Flatmate Extension) ─────────────────
+
+model HouseFixedCost {
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  groupId     String          @db.ObjectId
+  group       Group           @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  title       String
+  category    ExpenseCategory
+  amountPaise Int
+  splitRule   SplitType       @default(EQUAL)
+  isActive    Boolean         @default(true)
+  createdById String          @db.ObjectId
+  createdBy   User            @relation(fields: [createdById], references: [id])
+  createdAt   DateTime        @default(now())
+}
+
+model HouseMonthClose {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  groupId             String   @db.ObjectId
+  group               Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  month               Int      // 1–12
+  year                Int
+  fixedTotalPaise     Int
+  variableTotalPaise  Int
+  grandTotalPaise     Int
+  activeUserIds       String[] @db.ObjectId
+  isLocked            Boolean  @default(false)
+  lockedAt            DateTime?
+  createdAt           DateTime @default(now())
+}
+
+// ─── FRIEND REQUESTS ────────────────────────────────────
+
+model FriendRequest {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  fromUserId  String         @db.ObjectId
+  toUserId    String         @db.ObjectId
+  fromUser    User           @relation("RequestFrom", fields: [fromUserId], references: [id], onDelete: Cascade)
+  toUser      User           @relation("RequestTo", fields: [toUserId], references: [id], onDelete: Cascade)
+  status      RequestStatus  @default(PENDING)
+  createdAt   DateTime       @default(now())
+  respondedAt DateTime?
+
+  @@unique([fromUserId, toUserId])
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
