@@ -32,3 +32,11 @@ export async function joinGroup(data: JoinGroupInput): Promise<GroupResponse & {
 export async function deleteGroup(id: string): Promise<{ success: boolean }> {
   return apiDelete<{ success: boolean }>(`/api/groups/${id}`);
 }
+
+export async function removeGroupMember(groupId: string, memberId: string): Promise<{ success: boolean }> {
+  return apiDelete<{ success: boolean }>(`/api/groups/${groupId}/members/${memberId}`);
+}
+
+export async function updateGroupMemberRole(groupId: string, memberId: string, role: string): Promise<{ id: string; role: string }> {
+  return apiPatch<{ id: string; role: string }>(`/api/groups/${groupId}/members/${memberId}`, { role });
+}

@@ -1,19 +1,40 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
-import { getGroup } from '@/api/endpoints/groups';
+import { getGroup, removeGroupMember, updateGroupMemberRole } from '@/api/endpoints/groups';
 import { formatDateTime } from '@/lib/dates';
+import { useToast } from '@/components/ui/Toast';
 import { useAuthStore } from '@/store/auth';
 
 export default function GroupMembersTab() {
   const params = useParams();
   const groupId = params.id as string;
   const { user } = useAuthStore();
+  const queryClient = useQueryClient();
+  const { toastSuccess, toastError } = useToast();
 
   const { data: group, isLoading } = useQuery({
     queryKey: ['group', groupId],
     queryFn: () => getGroup(groupId),
+  });
+
+  const removeMutation = useMutation({
+    mutationFn: (memberId: string) => removeGroupMember(groupId, memberId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['group', groupId] });
+      toastSuccess('Member removed successfully');
+    },
+    onError: (e: any) => toastError(e.message),
+  });
+
+  const roleMutation = useMutation({
+    mutationFn: ({ memberId, role }: { memberId: string, role: string }) => updateGroupMemberRole(groupId, memberId, role),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['group', groupId] });
+      toastSuccess('Role updated successfully');
+    },
+    onError: (e: any) => toastError(e.message),
   });
 
   if (isLoading) {
@@ -74,14 +95,46 @@ export default function GroupMembersTab() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                {member.role === 'ADMIN' && (
-                  <span className="badge" style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}>
-                    Admin
-                  </span>
+                {member.role === 'ADMIN' ? (
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                    <span className="badge" style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}>
+                      Admin
+                    </span>
+                    {group.myRole === 'ADMIN' && member.userId !== user?.id && (
+                      <button 
+                        className="btn btn-secondary" 
+                        style={{ padding: '4px 8px', fontSize: '0.75rem' }}
+                        onClick={() => roleMutation.mutate({ memberId: member.id, role: 'MEMBER' })}
+                        disabled={roleMutation.isPending}
+                      >
+                        Demote
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  group.myRole === 'ADMIN' && (
+                    <button 
+                      className="btn btn-secondary" 
+                      style={{ padding: '6px 12px', fontSize: '0.875rem' }}
+                      onClick={() => roleMutation.mutate({ memberId: member.id, role: 'ADMIN' })}
+                      disabled={roleMutation.isPending}
+                    >
+                      Make Admin
+                    </button>
+                  )
                 )}
+                
                 {group.myRole === 'ADMIN' && member.userId !== user?.id && (
-                  <button className="btn btn-secondary" style={{ padding: '6px 12px', fontSize: '0.875rem' }}>
+                  <button 
+                    className="btn btn-secondary" 
+                    style={{ padding: '6px 12px', fontSize: '0.875rem', color: 'var(--negative)', borderColor: 'var(--negative)' }}
+                    onClick={() => {
+                      if (window.confirm('Are you sure you want to remove this member?')) {
+                        removeMutation.mutate(member.id);
+                      }
+                    }}
+                    disabled={removeMutation.isPending}
+                  >
                     Remove
                   </button>
                 )}

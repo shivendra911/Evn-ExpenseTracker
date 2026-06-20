@@ -43,20 +43,29 @@ export function withGroupMember<T extends { params: Promise<{ id: string }> }>(
       const { id: groupId } = await context.params;
       const userId = request.user.userId;
 
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { isAdmin: true },
+      });
+
       const membership = await prisma.groupMember.findUnique({
         where: {
           groupId_userId: { groupId, userId },
         },
       });
 
-      if (!membership) {
+      if (!membership && !user?.isAdmin) {
         throw new AuthorizationError('You are not a member of this group');
       }
 
       const groupMemberRequest = request as GroupMemberRequest;
+      // If user is a platform admin but not a member, grant them ADMIN role for the context of this request.
+      // If they are a member, but also a platform admin, they also get ADMIN role.
+      const role = user?.isAdmin ? 'ADMIN' : (membership?.role || 'MEMBER');
+
       groupMemberRequest.groupMembership = {
         groupId,
-        role: membership.role,
+        role,
       };
 
       return handler(groupMemberRequest, context);
