@@ -28,3 +28,7 @@ export async function updateGroup(id: string, data: UpdateGroupInput): Promise<G
 export async function joinGroup(data: JoinGroupInput): Promise<GroupResponse & { message: string }> {
   return apiPost<GroupResponse & { message: string }>('/api/groups/join', data);
 }
+
+export async function deleteGroup(id: string): Promise<{ success: boolean }> {
+  return apiDelete<{ success: boolean }>(`/api/groups/${id}`);
+}

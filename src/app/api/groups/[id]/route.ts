@@ -85,3 +85,19 @@ export const PUT = withGroupAdmin(async (request: GroupMemberRequest, context: {
     return errorResponse(error);
   }
 });
+
+export const DELETE = withGroupAdmin(async (request: GroupMemberRequest, context: { params: Promise<{ id: string }> }) => {
+  try {
+    const { id } = await context.params;
+
+    // Prisma onDelete: Cascade will handle group members, expenses, etc.
+    await prisma.group.delete({
+      where: { id },
+    });
+
+    return successResponse({ success: true });
+  } catch (error) {
+    return errorResponse(error);
+  }
+});
+

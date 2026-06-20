@@ -1,16 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
-import { getGroup } from '@/api/endpoints/groups';
+import { getGroup, deleteGroup } from '@/api/endpoints/groups';
 import { useToast } from '@/components/ui/Toast';
 
 export default function GroupSettingsTab() {
   const params = useParams();
   const groupId = params.id as string;
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { toastSuccess, toastError } = useToast();
+
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
   const { data: group, isLoading } = useQuery({
     queryKey: ['group', groupId],
@@ -32,13 +35,15 @@ export default function GroupSettingsTab() {
     // Update logic would go here
   };
 
-  const handleDelete = () => {
-    const confirm = window.confirm('Are you sure you want to delete this group? This action cannot be undone.');
-    if (confirm) {
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteGroup(groupId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['groups'] });
       toastSuccess('Group deleted successfully');
       router.push('/groups');
-    }
-  };
+    },
+    onError: (e: any) => toastError(e.message)
+  });
 
   if (isLoading) {
     return <div className="skeleton" style={{ height: 200 }} />;
@@ -85,14 +90,40 @@ export default function GroupSettingsTab() {
         </form>
       </div>
 
-      <div className="card" style={{ padding: 24, border: '1px solid var(--negative)' }}>
+      <div className="card" style={{ padding: 24, border: '1px solid var(--negative)', background: 'var(--negative-bg)' }}>
         <h3 style={{ fontSize: '1.125rem', color: 'var(--negative)', marginBottom: 12 }}>Danger Zone</h3>
         <p style={{ color: 'var(--text-secondary)', marginBottom: 24, fontSize: '0.875rem' }}>
           Deleting this group will permanently remove all associated expenses, settlements, and member data. This cannot be undone.
         </p>
-        <button className="btn btn-secondary" style={{ color: 'var(--negative)', borderColor: 'var(--negative)' }} onClick={handleDelete}>
-          Delete Group
-        </button>
+
+        {!showConfirmDelete ? (
+          <button 
+            className="btn btn-secondary" 
+            style={{ color: 'var(--negative)', borderColor: 'var(--negative)' }} 
+            onClick={() => setShowConfirmDelete(true)}
+          >
+            Delete Group
+          </button>
+        ) : (
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+            <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Are you sure?</span>
+            <button 
+              className="btn btn-secondary"
+              onClick={() => deleteMutation.mutate()}
+              disabled={deleteMutation.isPending}
+              style={{ background: 'var(--negative)', color: 'white', border: 'none' }}
+            >
+              {deleteMutation.isPending ? 'Deleting...' : 'Yes, Delete'}
+            </button>
+            <button 
+              className="btn btn-secondary" 
+              onClick={() => setShowConfirmDelete(false)}
+              disabled={deleteMutation.isPending}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

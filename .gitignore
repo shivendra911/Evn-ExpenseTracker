@@ -40,6 +40,15 @@ yarn-error.log*
 # custom scripts and temporary files
 backfill.js
 fix_db.ts
+e2e-test.mjs
+seed-test-data.mjs
+
+# AI and design notes
+AGENTS.md
+CLAUDE.md
+DECISIONS.md
+desions.md
+
 # vercel
 .vercel
 
