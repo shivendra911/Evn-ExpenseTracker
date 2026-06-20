@@ -7,14 +7,20 @@ export const metadata = {
 
 export default function LandingPage() {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg-default)' }}>
+    <div style={{ 
+      minHeight: '100vh', 
+      display: 'flex', 
+      flexDirection: 'column', 
+      backgroundColor: '#ffffff',
+      fontFamily: 'system-ui, -apple-system, sans-serif'
+    }}>
       {/* Navigation */}
       <nav style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '24px 5%',
-        maxWidth: 1200,
+        maxWidth: 1280,
         margin: '0 auto',
         width: '100%',
       }}>
@@ -22,156 +28,179 @@ export default function LandingPage() {
           <img 
             src="/logo.png" 
             alt="Evn Logo" 
-            width={36} 
-            height={36} 
+            width={40} 
+            height={40} 
             style={{ 
               flexShrink: 0, 
               objectFit: 'contain', 
-              background: '#FFFFFF', 
-              borderRadius: '50%', 
-              padding: '2px' 
             }} 
           />
-          <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
+          <span style={{ fontSize: '1.75rem', fontWeight: 800, color: '#000048', letterSpacing: '-0.5px' }}>
             Evn
           </span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <Link href="/login" style={{ 
-            color: 'var(--text-secondary)', 
-            fontWeight: 500, 
+            color: '#000048',
+            fontWeight: 600,
             textDecoration: 'none',
-            padding: '8px 16px',
-            borderRadius: 'var(--radius-md)',
-            transition: 'all 0.2s ease',
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-primary)'}
-          onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
-          >
-            Sign In
-          </Link>
-          <Link href="/register" className="btn btn-primary" style={{ padding: '10px 24px', fontWeight: 600 }}>
-            Get Started
+            backgroundColor: '#26EFE9',
+            padding: '12px 24px',
+            borderRadius: '100px',
+            transition: 'background-color 0.3s ease',
+          }}>
+            Login
           </Link>
         </div>
       </nav>
 
-      {/* Hero Section */}
+      {/* Main Content Grid */}
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <section style={{ 
-          padding: '120px 5% 80px', 
-          textAlign: 'center', 
-          maxWidth: 900, 
+          padding: '80px 5% 80px', 
+          maxWidth: 1280, 
           margin: '0 auto',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
+          display: 'grid',
+          gridTemplateColumns: '7fr 5fr',
+          gap: '40px',
+          alignItems: 'center',
+          width: '100%'
         }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 8,
-            padding: '8px 16px',
-            background: 'rgba(99, 102, 241, 0.1)',
-            border: '1px solid rgba(99, 102, 241, 0.2)',
-            borderRadius: 100,
-            marginBottom: 32,
-            color: 'var(--accent)',
-            fontSize: '0.875rem',
-            fontWeight: 600,
-          }}>
-            <span style={{ display: 'flex', width: 8, height: 8, borderRadius: '50%', background: 'var(--accent)' }}></span>
-            Now open in Beta
-          </div>
-          
-          <h1 style={{ 
-            fontSize: 'clamp(3rem, 8vw, 4.5rem)', 
-            fontWeight: 800, 
-            lineHeight: 1.1, 
-            letterSpacing: '-1.5px',
-            marginBottom: 24,
-            color: 'var(--text-primary)'
-          }}>
-            Split expenses <br />
-            <span style={{ 
-              background: 'linear-gradient(135deg, #818CF8 0%, #6366F1 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}>seamlessly.</span>
-          </h1>
-          
-          <p style={{ 
-            fontSize: 'clamp(1.125rem, 3vw, 1.25rem)', 
-            color: 'var(--text-secondary)', 
-            maxWidth: 600, 
-            lineHeight: 1.6,
-            marginBottom: 48 
-          }}>
-            The smartest way to track, split, and settle shared costs with friends, roommates, and travel groups. Never worry about who owes who again.
-          </p>
+          {/* Left Column - Text & CTAs */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <h1 style={{ 
+              fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', 
+              fontWeight: 700, 
+              lineHeight: 1.2, 
+              color: '#000048',
+              marginBottom: '1rem'
+            }}>
+              Build smart financial habits, at the speed of life
+            </h1>
+            
+            <p style={{ 
+              fontSize: '1.5rem', 
+              fontWeight: 600,
+              color: '#2F78C4', 
+              marginBottom: '1.5rem' 
+            }}>
+              Tracking expenses for thousands of roommates & groups
+            </p>
 
-          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <Link href="/register" className="btn btn-primary btn-lg" style={{ padding: '16px 32px', fontSize: '1.125rem', borderRadius: 'var(--radius-lg)' }}>
-              Start tracking for free
-            </Link>
-            <Link href="/login" className="btn btn-secondary btn-lg" style={{ padding: '16px 32px', fontSize: '1.125rem', borderRadius: 'var(--radius-lg)' }}>
-              Sign In
-            </Link>
+            <p style={{ 
+              fontSize: '1.125rem', 
+              color: '#53565A', 
+              lineHeight: 1.75,
+              marginBottom: '1rem'
+            }}>
+              Shared living is reshaping finances faster than expected.
+              What used to be a hassle of spreadsheets and receipts is now seamless, making continuous expense tracking essential.
+            </p>
+            
+            <p style={{ 
+              fontSize: '1.125rem', 
+              color: '#53565A', 
+              lineHeight: 1.75,
+              marginBottom: '1rem'
+            }}>
+              Evn is a unified, conversational tracking platform designed to help you build transparent financial relationships in the flow of life. 
+            </p>
+
+            <p style={{ 
+              fontSize: '1.125rem', 
+              fontWeight: 600,
+              color: '#736E6E', 
+              lineHeight: 1.75,
+              marginTop: '1.5rem',
+              marginBottom: '1.5rem'
+            }}>
+              Join by invitation or create your own group experience.
+            </p>
+
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: '1rem' }}>
+              <Link href="/register" style={{ 
+                backgroundColor: '#2E308E',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '100px',
+                padding: '16px 40px',
+                fontSize: '1.25rem',
+                fontWeight: 600,
+                textDecoration: 'none',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+              }}>
+                Get Started
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Column - Video/Image Placeholder */}
+          <div style={{ 
+            width: '100%', 
+            height: '100%', 
+            minHeight: '400px',
+            backgroundColor: '#F3F4F6', 
+            borderRadius: '12px',
+            position: 'relative',
+            overflow: 'hidden',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+          }}>
+            {/* Play Button Icon representation */}
+            <div style={{
+              width: 80,
+              height: 80,
+              backgroundColor: 'rgba(0,0,48,0.7)',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer'
+            }}>
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 5V19L19 12L8 5Z" />
+              </svg>
+            </div>
           </div>
         </section>
 
         {/* Feature Grid */}
-        <section style={{ padding: '80px 5% 120px', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
+        <section style={{ padding: '40px 5% 120px', maxWidth: 1280, margin: '0 auto', width: '100%' }}>
           <div style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-            gap: 32 
+            gap: '32px' 
           }}>
             {/* Feature 1 */}
-            <div className="card" style={{ padding: 40, border: '1px solid var(--border-default)', transition: 'transform 0.2s ease', cursor: 'default' }}>
-              <div style={{ 
-                width: 48, height: 48, borderRadius: 12, background: 'var(--accent-light)', color: 'var(--accent)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24
-              }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
-              </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 12 }}>Group Splitting</h3>
-              <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+            <div style={{ padding: '24px 0', borderTop: '2px solid #E5E7EB' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#000048', marginBottom: '1rem', minHeight: '45px' }}>
+                Group Splitting
+              </h3>
+              <p style={{ color: '#53565A', lineHeight: 1.75, fontSize: '1.125rem' }}>
                 Create custom groups for trips, dinners, or events. Add expenses easily and let Evn calculate the exact splits automatically.
               </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="card" style={{ padding: 40, border: '1px solid var(--border-default)', transition: 'transform 0.2s ease', cursor: 'default' }}>
-              <div style={{ 
-                width: 48, height: 48, borderRadius: 12, background: 'rgba(16, 185, 129, 0.1)', color: '#10B981',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24
-              }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
-                </svg>
-              </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 12 }}>House Management</h3>
-              <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+            <div style={{ padding: '24px 0', borderTop: '2px solid #E5E7EB' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#000048', marginBottom: '1rem', minHeight: '45px' }}>
+                House Management
+              </h3>
+              <p style={{ color: '#53565A', lineHeight: 1.75, fontSize: '1.125rem' }}>
                 Manage recurring household bills and rent with roommates. Track long-term shared expenses effortlessly.
               </p>
             </div>
 
             {/* Feature 3 */}
-            <div className="card" style={{ padding: 40, border: '1px solid var(--border-default)', transition: 'transform 0.2s ease', cursor: 'default' }}>
-              <div style={{ 
-                width: 48, height: 48, borderRadius: 12, background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24
-              }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                </svg>
-              </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 12 }}>Instant Settlements</h3>
-              <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+            <div style={{ padding: '24px 0', borderTop: '2px solid #E5E7EB' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#000048', marginBottom: '1rem', minHeight: '45px' }}>
+                Instant Settlements
+              </h3>
+              <p style={{ color: '#53565A', lineHeight: 1.75, fontSize: '1.125rem' }}>
                 Our algorithm minimizes the number of transactions needed to settle debts. Pay back friends with fewer transfers.
               </p>
             </div>
@@ -182,22 +211,23 @@ export default function LandingPage() {
       {/* Footer */}
       <footer style={{ 
         padding: '40px 5%', 
-        borderTop: '1px solid var(--border-default)',
+        borderTop: '1px solid #E5E7EB',
         textAlign: 'center',
-        color: 'var(--text-muted)'
+        color: '#53565A',
+        backgroundColor: '#F9FAFB'
       }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <img 
               src="/logo.png" 
               alt="Evn Logo" 
               width={24} 
               height={24} 
-              style={{ background: '#FFFFFF', borderRadius: '50%', padding: '1px' }} 
+              style={{ objectFit: 'contain' }} 
             />
-            <span style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Evn</span>
+            <span style={{ fontWeight: 600, color: '#000048' }}>Evn</span>
           </div>
-          <p style={{ fontSize: '0.875rem' }}>© {new Date().getFullYear()} Evn Expense Tracker. All rights reserved.</p>
+          <p style={{ fontSize: '1rem' }}>© {new Date().getFullYear()} Evn Expense Tracker. All rights reserved.</p>
         </div>
       </footer>
     </div>
