@@ -119,7 +119,7 @@ export default function LandingPage() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <div style={{ width: 24, height: 24, borderRadius: '4px', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </div>
                   <span>You</span>
                 </div>
@@ -128,7 +128,7 @@ export default function LandingPage() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <div style={{ width: 24, height: 24, borderRadius: '4px', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </div>
                   <span>Ravi</span>
                 </div>
@@ -144,7 +144,7 @@ export default function LandingPage() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <div style={{ width: 24, height: 24, borderRadius: '4px', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </div>
                   <span>Karan</span>
                 </div>
@@ -199,8 +199,8 @@ export default function LandingPage() {
                 <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>Not the whole group by default. Exclude people with a single tap, and the math recalibrates instantly.</p>
               </div>
               <div style={{ backgroundColor: 'var(--bg-surface)', padding: 16, borderRadius: 8, border: '1px solid var(--border-default)', display: 'flex', gap: 8 }}>
-                <div style={{ padding: '4px 12px', background: 'var(--accent)', color: 'white', borderRadius: 100, fontSize: '0.875rem' }}>You</div>
-                <div style={{ padding: '4px 12px', background: 'var(--accent)', color: 'white', borderRadius: 100, fontSize: '0.875rem' }}>Ravi</div>
+                <div style={{ padding: '4px 12px', background: 'var(--accent)', color: 'var(--text-inverse)', borderRadius: 100, fontSize: '0.875rem', fontWeight: 500 }}>You</div>
+                <div style={{ padding: '4px 12px', background: 'var(--accent)', color: 'var(--text-inverse)', borderRadius: 100, fontSize: '0.875rem', fontWeight: 500 }}>Ravi</div>
                 <div style={{ padding: '4px 12px', border: '1px solid var(--border-default)', color: 'var(--text-muted)', borderRadius: 100, fontSize: '0.875rem', textDecoration: 'line-through' }}>Priya</div>
               </div>
             </div>
