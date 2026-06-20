@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { Logo } from '@/components/ui/Logo';
 
 export const metadata = {
   title: 'Evn | Split what\'s shared. Skip what\'s not.',
@@ -8,218 +9,143 @@ export const metadata = {
 
 export default function LandingPage() {
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      backgroundColor: 'var(--bg-default)',
-      color: 'var(--text-primary)',
-    }}>
-      {/* Navigation */}
-      <nav style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '24px 5%',
-        maxWidth: 1200,
-        margin: '0 auto',
-        width: '100%',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <img 
-            src="/logo.png" 
-            alt="Evn Logo" 
-            width={32} 
-            height={32} 
-            style={{ 
-              flexShrink: 0, 
-              objectFit: 'contain', 
-              background: '#FFFFFF',
-              borderRadius: '50%',
-              padding: '2px'
-            }} 
-          />
-          <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
-            Evn
-          </span>
-        </div>
+    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)]">
+      {/* Navigation - Sticky */}
+      <nav className="sticky top-0 z-50 w-full border-b border-[var(--border-default)] bg-[var(--bg-primary)]/90 backdrop-blur-md">
+        <div className="flex items-center justify-between px-5 py-4 max-w-6xl mx-auto w-full">
+          <Logo />
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <ThemeToggle />
-          <Link href="/login" style={{ 
-            color: 'var(--text-inverse)',
-            fontWeight: 600,
-            backgroundColor: 'var(--accent)',
-            textDecoration: 'none',
-            padding: '10px 24px',
-            borderRadius: '100px',
-            transition: 'opacity 0.2s',
-          }}>
-            Log In
-          </Link>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <Link href="/login" className="text-[var(--text-inverse)] font-semibold bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-colors no-underline px-6 py-2.5 rounded-full text-sm md:text-base">
+              Log In
+            </Link>
+          </div>
         </div>
       </nav>
 
-      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingBottom: '120px' }}>
+      <main className="flex-1 flex flex-col pb-24">
         
         {/* 1. Hero */}
-        <section style={{ 
-          padding: '80px 5% 40px', 
-          maxWidth: 900, 
-          margin: '0 auto',
-          width: '100%',
-        }}>
-          <h1 style={{ 
-            fontSize: 'clamp(2.5rem, 6vw, 4rem)', 
-            fontWeight: 800, 
-            lineHeight: 1.1, 
-            letterSpacing: '-1.5px',
-            marginBottom: '24px',
-            color: 'var(--text-primary)'
-          }}>
+        <section className="py-16 md:py-24 px-5 max-w-4xl mx-auto w-full">
+          <h1 className="text-4xl sm:text-5xl md:text-[4rem] font-extrabold leading-[1.1] tracking-tight mb-6 text-[var(--text-primary)]">
             Split what's shared.<br />
             Skip what's not.
           </h1>
           
-          <p style={{ 
-            fontSize: '1.25rem', 
-            color: 'var(--text-secondary)', 
-            maxWidth: 700, 
-            lineHeight: 1.6,
-            marginBottom: '40px' 
-          }}>
+          <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl leading-relaxed mb-10">
             If only three of you ate the rice, only three of you should pay for the rice. 
             A precision expense tracker built for real households.
           </p>
 
-          <Link href="/register" className="btn btn-primary" style={{ 
-            padding: '14px 32px', 
-            fontSize: '1.125rem', 
-            borderRadius: 'var(--radius-md)',
-            fontWeight: 600,
-            display: 'inline-flex'
-          }}>
+          <Link href="/register" className="btn btn-primary w-full sm:w-auto px-8 py-3.5 text-lg rounded-md font-semibold inline-flex text-center justify-center shadow-sm hover:shadow-md">
             Start free
           </Link>
 
           {/* Mini-demo Split-preview Screen Mockup */}
-          <div style={{ 
-            marginTop: '60px',
-            backgroundColor: 'var(--bg-surface)',
-            border: '1px solid var(--border-default)',
-            borderRadius: '12px',
-            padding: '24px',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 24, borderBottom: '1px solid var(--border-default)', paddingBottom: 16 }}>
+          <div className="mt-16 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-5 md:p-8">
+            <div className="flex justify-between mb-6 border-b border-[var(--border-default)] pb-4">
               <div>
-                <div style={{ fontSize: '1.125rem', fontWeight: 600 }}>Groceries (Rice & Veggies)</div>
-                <div style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Paid by you • ₹1,200.00</div>
+                <div className="text-lg md:text-xl font-semibold">Groceries (Rice & Veggies)</div>
+                <div className="text-[var(--text-secondary)] text-sm mt-1">Paid by you • ₹1,200.00</div>
               </div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--accent)' }}>₹1,200</div>
+              <div className="text-xl md:text-2xl font-bold text-[var(--accent)] shrink-0 pl-4">₹1,200</div>
             </div>
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 24, height: 24, borderRadius: '4px', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="flex flex-col gap-4">
+              {/* Row 1 */}
+              <div className="flex justify-between items-center group">
+                <div className="flex items-center gap-3 md:gap-4 min-w-0 pr-4">
+                  <div className="w-8 h-8 md:w-6 md:h-6 rounded bg-[var(--accent)] flex items-center justify-center shrink-0">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </div>
-                  <span>You</span>
+                  <span className="font-medium truncate">You</span>
                 </div>
-                <div style={{ fontFamily: 'monospace' }}>₹400.00</div>
+                <div className="font-mono text-sm md:text-base shrink-0">₹400.00</div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 24, height: 24, borderRadius: '4px', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {/* Row 2 */}
+              <div className="flex justify-between items-center group">
+                <div className="flex items-center gap-3 md:gap-4 min-w-0 pr-4">
+                  <div className="w-8 h-8 md:w-6 md:h-6 rounded bg-[var(--accent)] flex items-center justify-center shrink-0">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </div>
-                  <span>Ravi</span>
+                  <span className="font-medium truncate">Ravi</span>
                 </div>
-                <div style={{ fontFamily: 'monospace' }}>₹400.00</div>
+                <div className="font-mono text-sm md:text-base shrink-0">₹400.00</div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: 0.5 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 24, height: 24, borderRadius: '4px', border: '1px solid var(--border-default)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}></div>
-                  <span style={{ textDecoration: 'line-through' }}>Priya (Out of town)</span>
+              {/* Row 3 - Excluded */}
+              <div className="flex justify-between items-center opacity-50 group">
+                <div className="flex items-center gap-3 md:gap-4 min-w-0 pr-4">
+                  <div className="w-8 h-8 md:w-6 md:h-6 rounded border border-[var(--border-default)] flex items-center justify-center shrink-0"></div>
+                  <span className="line-through font-medium truncate">Priya <span className="hidden sm:inline">(Out of town)</span></span>
                 </div>
-                <div style={{ fontFamily: 'monospace' }}>₹0.00</div>
+                <div className="font-mono text-sm md:text-base shrink-0">₹0.00</div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 24, height: 24, borderRadius: '4px', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {/* Row 4 */}
+              <div className="flex justify-between items-center group">
+                <div className="flex items-center gap-3 md:gap-4 min-w-0 pr-4">
+                  <div className="w-8 h-8 md:w-6 md:h-6 rounded bg-[var(--accent)] flex items-center justify-center shrink-0">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </div>
-                  <span>Karan</span>
+                  <span className="font-medium truncate">Karan</span>
                 </div>
-                <div style={{ fontFamily: 'monospace' }}>₹400.00</div>
+                <div className="font-mono text-sm md:text-base shrink-0">₹400.00</div>
               </div>
             </div>
           </div>
         </section>
 
         {/* 2. The Problem */}
-        <section style={{ 
-          padding: '80px 5%', 
-          maxWidth: 900, 
-          margin: '0 auto',
-          width: '100%',
-        }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '24px' }}>Most tools assume everyone owes for everything.</h2>
-          <p style={{ fontSize: '1.25rem', color: 'var(--text-secondary)', lineHeight: 1.6, maxWidth: 700 }}>
+        <section className="py-12 md:py-24 px-5 max-w-4xl mx-auto w-full">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Most tools assume everyone owes for everything.</h2>
+          <p className="text-lg md:text-xl text-[var(--text-secondary)] leading-relaxed max-w-2xl">
             Real households don't work that way. One person is vegetarian, one's never home for dinner, and one paid the Wi-Fi bill alone. Splitting shouldn't require a spreadsheet.
           </p>
         </section>
 
         {/* 3. How it actually works */}
-        <section style={{ 
-          padding: '80px 5%', 
-          maxWidth: 900, 
-          margin: '0 auto',
-          width: '100%',
-          borderTop: '1px solid var(--border-default)'
-        }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '48px' }}>How it works</h2>
+        <section className="py-12 md:py-24 px-5 max-w-4xl mx-auto w-full border-t border-[var(--border-default)]">
+          <h2 className="text-3xl md:text-4xl font-bold mb-12">How it works</h2>
           
-          <div style={{ display: 'grid', gap: '48px' }}>
+          <div className="grid gap-12 md:gap-16">
             {/* Step 1 */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px', alignItems: 'center' }}>
+            <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
-                <div style={{ color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>01</div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 12 }}>Add an expense, who paid.</h3>
-                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>Record the exact amount and the payer immediately. No complex categorization required.</p>
+                <div className="text-[var(--accent)] font-bold mb-2">01</div>
+                <h3 className="text-xl font-semibold mb-3">Add an expense, who paid.</h3>
+                <p className="text-[var(--text-secondary)] leading-relaxed">Record the exact amount and the payer immediately. No complex categorization required.</p>
               </div>
-              <div style={{ backgroundColor: 'var(--bg-surface)', padding: 16, borderRadius: 8, border: '1px solid var(--border-default)' }}>
-                <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: 8 }}>Amount Paid</div>
-                <div style={{ fontSize: '2rem', fontWeight: 700 }}>₹850.00</div>
+              <div className="bg-[var(--bg-card)] p-5 md:p-6 rounded-xl border border-[var(--border-default)]">
+                <div className="text-sm text-[var(--text-secondary)] mb-2">Amount Paid</div>
+                <div className="text-3xl font-bold">₹850.00</div>
               </div>
             </div>
 
             {/* Step 2 */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px', alignItems: 'center' }}>
+            <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
-                <div style={{ color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>02</div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 12 }}>Choose who's actually in on it.</h3>
-                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>Not the whole group by default. Exclude people with a single tap, and the math recalibrates instantly.</p>
+                <div className="text-[var(--accent)] font-bold mb-2">02</div>
+                <h3 className="text-xl font-semibold mb-3">Choose who's actually in on it.</h3>
+                <p className="text-[var(--text-secondary)] leading-relaxed">Not the whole group by default. Exclude people with a single tap, and the math recalibrates instantly.</p>
               </div>
-              <div style={{ backgroundColor: 'var(--bg-surface)', padding: 16, borderRadius: 8, border: '1px solid var(--border-default)', display: 'flex', gap: 8 }}>
-                <div style={{ padding: '4px 12px', background: 'var(--accent)', color: 'var(--text-inverse)', borderRadius: 100, fontSize: '0.875rem', fontWeight: 500 }}>You</div>
-                <div style={{ padding: '4px 12px', background: 'var(--accent)', color: 'var(--text-inverse)', borderRadius: 100, fontSize: '0.875rem', fontWeight: 500 }}>Ravi</div>
-                <div style={{ padding: '4px 12px', border: '1px solid var(--border-default)', color: 'var(--text-muted)', borderRadius: 100, fontSize: '0.875rem', textDecoration: 'line-through' }}>Priya</div>
+              <div className="bg-[var(--bg-card)] p-5 md:p-6 rounded-xl border border-[var(--border-default)] flex flex-wrap gap-2">
+                <div className="px-3 py-1.5 bg-[var(--accent)] text-[var(--text-inverse)] rounded-full text-sm font-medium">You</div>
+                <div className="px-3 py-1.5 bg-[var(--accent)] text-[var(--text-inverse)] rounded-full text-sm font-medium">Ravi</div>
+                <div className="px-3 py-1.5 border border-[var(--border-default)] text-[var(--text-muted)] rounded-full text-sm line-through">Priya</div>
               </div>
             </div>
 
             {/* Step 3 */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px', alignItems: 'center' }}>
+            <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
-                <div style={{ color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>03</div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 12 }}>See the simplified settlement.</h3>
-                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>Instead of 12 crisscrossing IOUs, the algorithm calculates the absolute minimum number of transfers to get everyone whole.</p>
+                <div className="text-[var(--accent)] font-bold mb-2">03</div>
+                <h3 className="text-xl font-semibold mb-3">See the simplified settlement.</h3>
+                <p className="text-[var(--text-secondary)] leading-relaxed">Instead of 12 crisscrossing IOUs, the algorithm calculates the absolute minimum number of transfers to get everyone whole.</p>
               </div>
-              <div style={{ backgroundColor: 'var(--bg-surface)', padding: 16, borderRadius: 8, border: '1px solid var(--border-default)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span>Priya owes Ravi</span>
-                  <span style={{ fontWeight: 600 }}>₹425.00</span>
+              <div className="bg-[var(--bg-card)] p-5 md:p-6 rounded-xl border border-[var(--border-default)]">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium">Priya owes Ravi</span>
+                  <span className="font-bold">₹425.00</span>
                 </div>
               </div>
             </div>
@@ -227,42 +153,32 @@ export default function LandingPage() {
         </section>
 
         {/* 4. The House module */}
-        <section style={{ 
-          padding: '80px 5%', 
-          backgroundColor: 'var(--bg-surface)',
-          borderTop: '1px solid var(--border-default)',
-          borderBottom: '1px solid var(--border-default)'
-        }}>
-          <div style={{ maxWidth: 900, margin: '0 auto', width: '100%' }}>
-            <div style={{ display: 'inline-block', border: '1px solid var(--accent)', color: 'var(--accent)', padding: '4px 12px', borderRadius: 4, fontSize: '0.875rem', fontWeight: 600, marginBottom: 24 }}>
+        <section className="py-12 md:py-24 px-5 bg-[var(--bg-card)] border-y border-[var(--border-default)]">
+          <div className="max-w-4xl mx-auto w-full">
+            <div className="inline-block border border-[var(--accent)] text-[var(--accent)] px-3 py-1 rounded text-sm font-bold mb-6">
               Built for flatmates
             </div>
-            <h2 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '24px' }}>The House Module</h2>
-            <p style={{ fontSize: '1.125rem', color: 'var(--text-secondary)', lineHeight: 1.6, maxWidth: 700, marginBottom: 40 }}>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">The House Module</h2>
+            <p className="text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl mb-10">
               Living together means managing two distinctly different types of expenses: fixed recurring costs (like Rent and Electricity) and volatile daily entries (like groceries and takeaways). Evn separates these intentionally. 
             </p>
             
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
-              <div style={{ padding: 24, border: '1px solid var(--border-default)', borderRadius: 8, backgroundColor: 'var(--bg-default)' }}>
-                <h4 style={{ fontWeight: 600, marginBottom: 8 }}>Fixed Costs</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', lineHeight: 1.5 }}>Rent and utilities that split predictably. Add them once, clear them at the end of the month.</p>
+            <div className="grid sm:grid-cols-2 gap-6">
+              <div className="p-6 border border-[var(--border-default)] rounded-xl bg-[var(--bg-primary)]">
+                <h4 className="font-semibold text-lg mb-2">Fixed Costs</h4>
+                <p className="text-[var(--text-secondary)] leading-relaxed text-sm">Rent and utilities that split predictably. Add them once, clear them at the end of the month.</p>
               </div>
-              <div style={{ padding: 24, border: '1px solid var(--border-default)', borderRadius: 8, backgroundColor: 'var(--bg-default)' }}>
-                <h4 style={{ fontWeight: 600, marginBottom: 8 }}>Daily Flow</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', lineHeight: 1.5 }}>Fast entry for one-off shared meals and supplies, with per-person exclusion toggles.</p>
+              <div className="p-6 border border-[var(--border-default)] rounded-xl bg-[var(--bg-primary)]">
+                <h4 className="font-semibold text-lg mb-2">Daily Flow</h4>
+                <p className="text-[var(--text-secondary)] leading-relaxed text-sm">Fast entry for one-off shared meals and supplies, with per-person exclusion toggles.</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* 5. Trust / credibility strip */}
-        <section style={{ 
-          padding: '40px 5%', 
-          maxWidth: 900, 
-          margin: '0 auto',
-          width: '100%',
-        }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 32, color: 'var(--text-muted)', fontSize: '0.875rem', fontFamily: 'monospace' }}>
+        <section className="py-12 md:py-16 px-5 max-w-4xl mx-auto w-full">
+          <div className="flex flex-col md:flex-row flex-wrap gap-4 md:gap-8 text-[var(--text-muted)] text-sm font-mono leading-relaxed">
             <div>// Open about how it works</div>
             <div>[Integer Paise Math] No floating point rounding bugs.</div>
             <div>[JWT Auth] Rotating refresh tokens for security.</div>
@@ -271,72 +187,50 @@ export default function LandingPage() {
         </section>
 
         {/* 6. Friends & Groups */}
-        <section style={{ 
-          padding: '80px 5%', 
-          maxWidth: 900, 
-          margin: '0 auto',
-          width: '100%',
-          borderTop: '1px solid var(--border-default)'
-        }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '24px' }}>Connections, clarified.</h2>
-          <p style={{ fontSize: '1.125rem', color: 'var(--text-secondary)', lineHeight: 1.6, maxWidth: 700, marginBottom: 32 }}>
+        <section className="py-12 md:py-24 px-5 max-w-4xl mx-auto w-full border-t border-[var(--border-default)]">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Connections, clarified.</h2>
+          <p className="text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl mb-10">
             This is not a social network. Your friend list isn't public, and connections don't happen automatically. There are exactly two ways to connect with someone:
           </p>
           
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-            <div style={{ display: 'flex', gap: 16 }}>
-              <div style={{ color: 'var(--accent)', fontWeight: 700 }}>1.</div>
+          <div className="flex flex-col gap-8">
+            <div className="flex gap-4">
+              <div className="text-[var(--accent)] font-bold text-xl">1.</div>
               <div>
-                <strong style={{ display: 'block', marginBottom: 4 }}>Share a Group Code</strong>
-                <span style={{ color: 'var(--text-secondary)' }}>Send a unique invite code to a chat. Anyone who enters it joins the group immediately.</span>
+                <strong className="block mb-1 text-lg">Share a Group Code</strong>
+                <span className="text-[var(--text-secondary)] leading-relaxed block max-w-2xl">Send a unique invite code to a chat. Anyone who enters it joins the group immediately.</span>
               </div>
             </div>
-            <div style={{ display: 'flex', gap: 16 }}>
-              <div style={{ color: 'var(--accent)', fontWeight: 700 }}>2.</div>
+            <div className="flex gap-4">
+              <div className="text-[var(--accent)] font-bold text-xl">2.</div>
               <div>
-                <strong style={{ display: 'block', marginBottom: 4 }}>Add via ID</strong>
-                <span style={{ color: 'var(--text-secondary)' }}>Send a direct request using someone's exact User ID. They must explicitly accept it before you are linked.</span>
+                <strong className="block mb-1 text-lg">Add via ID</strong>
+                <span className="text-[var(--text-secondary)] leading-relaxed block max-w-2xl">Send a direct request using someone's exact User ID. They must explicitly accept it before you are linked.</span>
               </div>
             </div>
           </div>
         </section>
 
         {/* 7. Final CTA */}
-        <section style={{ 
-          padding: '120px 5%', 
-          maxWidth: 900, 
-          margin: '0 auto',
-          width: '100%',
-          textAlign: 'center'
-        }}>
-          <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 800, marginBottom: '32px' }}>
+        <section className="py-24 px-5 max-w-4xl mx-auto w-full text-center">
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-10 tracking-tight leading-tight">
             Split what's shared.<br />
             Skip what's not.
           </h2>
-          <Link href="/register" className="btn btn-primary" style={{ 
-            padding: '14px 32px', 
-            fontSize: '1.125rem', 
-            borderRadius: 'var(--radius-md)',
-            fontWeight: 600,
-            display: 'inline-flex'
-          }}>
+          <Link href="/register" className="btn btn-primary w-full sm:w-auto px-10 py-4 text-lg rounded-md font-semibold inline-flex text-center justify-center shadow-sm hover:shadow-md">
             Start free
           </Link>
         </section>
       </main>
 
       {/* 8. Footer */}
-      <footer style={{ 
-        padding: '32px 5%', 
-        borderTop: '1px solid var(--border-default)',
-        color: 'var(--text-muted)'
-      }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Evn</span>
-            <span style={{ fontSize: '0.875rem' }}>— Expense tracker</span>
+      <footer className="py-8 px-5 border-t border-[var(--border-default)] text-[var(--text-muted)]">
+        <div className="max-w-4xl mx-auto w-full flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-[var(--text-secondary)]">Evn</span>
+            <span className="text-sm">— Expense tracker</span>
           </div>
-          <div style={{ fontSize: '0.875rem' }}>
+          <div className="text-sm">
             Solo build.
           </div>
         </div>

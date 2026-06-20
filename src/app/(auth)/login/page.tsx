@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
 import { loginUser } from '@/api/endpoints/auth';
 import { useToast } from '@/components/ui/Toast';
+import { Logo } from '@/components/ui/Logo';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -106,8 +107,10 @@ export default function LoginPage() {
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
       <div style={{ width: '100%', maxWidth: 400 }}>
         {/* Logo / App Name */}
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <img src="/logo.png" alt="Evn Logo" width={80} height={80} style={{ objectFit: 'contain', marginBottom: 16, background: '#FFFFFF', borderRadius: '50%', padding: '4px' }} />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 32 }}>
+          <div style={{ marginBottom: 24 }}>
+            <Logo />
+          </div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 4 }}>Welcome back</h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem' }}>
             Sign in to your expense tracker

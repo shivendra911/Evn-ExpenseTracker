@@ -13,17 +13,17 @@
   --bg-active: #E5E7EB;
   --bg-secondary: #F3F4F6;
 
-  --text-primary: #000048; /* Navy */
-  --text-secondary: #53565A; /* Dark Gray */
+  --text-primary: #0F172A; /* Slate 900 */
+  --text-secondary: #475569; /* Slate 600 */
   --text-muted: #9CA3AF;
   --text-inverse: #FFFFFF;
 
   --border-default: #E5E7EB;
-  --border-focus: #2E308E;
+  --border-focus: #2563EB;
 
-  --accent: #2E308E; /* Royal Blue */
-  --accent-hover: #1e1f61;
-  --accent-light: #E0E7FF;
+  --accent: #2563EB; /* Clean Blue */
+  --accent-hover: #1D4ED8;
+  --accent-light: #DBEAFE;
 
   --positive: #16A34A;
   --positive-bg: #F0FDF4;
@@ -60,11 +60,11 @@
   --text-inverse: #050B14;
 
   --border-default: #1E293B;
-  --border-focus: #26EFE9;
+  --border-focus: #2563EB;
 
-  --accent: #26EFE9; /* Cyan */
-  --accent-hover: #97F5F7;
-  --accent-light: #0A2239;
+  --accent: #2563EB; /* Clean Blue */
+  --accent-hover: #3B82F6;
+  --accent-light: #1E3A8A;
 
   --positive: #4ADE80;
   --positive-bg: rgba(74, 222, 128, 0.12);
@@ -79,7 +79,7 @@
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
 }
 
-@theme inline {
+@theme {
   --color-background: var(--bg-primary);
   --color-foreground: var(--text-primary);
   --color-accent: var(--accent);
@@ -96,18 +96,13 @@
 }
 
 /* ─── Base Styles ────────────────────────────────────────── */
+@layer base {
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 
 body {
   background: var(--bg-primary);
@@ -129,7 +124,9 @@ h1, h2, h3, h4, h5, h6 {
 h1 { font-size: 1.75rem; }
 h2 { font-size: 1.375rem; }
 h3 { font-size: 1.125rem; }
+} /* end @layer base */
 
+@layer components {
 /* ─── Money Values ───────────────────────────────────────── */
 
 .money {
@@ -155,14 +152,11 @@ h3 { font-size: 1.125rem; }
   background: var(--bg-card);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .card-hover:hover {
-  box-shadow: var(--shadow-md);
   border-color: var(--border-focus);
-  transform: translateY(-1px);
   transition: all 0.18s ease;
 }
 
@@ -559,3 +553,4 @@ td.money-cell {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+} /* end @layer components */

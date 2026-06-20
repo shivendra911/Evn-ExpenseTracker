@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
 import { logoutUser } from '@/api/endpoints/auth';
+import { Logo } from '@/components/ui/Logo';
 
 const ROUTE_TITLES: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -52,15 +53,12 @@ export function Header() {
         zIndex: 30,
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         {/* Mobile brand logo (hidden on desktop) */}
-        <div className="md-hidden" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
-            <circle cx="16" cy="16" r="13" stroke="var(--accent)" strokeWidth="2.5" />
-            <path d="M16 3 A 13 13 0 0 1 16 29 Z" fill="var(--accent)" />
-          </svg>
+        <div className="md-hidden">
+          <Logo className="scale-90 origin-left" />
         </div>
-        <h1 style={{ fontSize: '1.125rem', fontWeight: 600, margin: 0 }}>
+        <h1 className="hidden md-block" style={{ fontSize: '1.125rem', fontWeight: 600, margin: 0 }}>
           {title}
         </h1>
       </div>
@@ -88,26 +86,17 @@ export function Header() {
             onClick={() => router.push('/profile')}
             className="row-hover"
             style={{
-              display: 'flex', alignItems: 'center', gap: 10,
-              background: 'var(--bg-secondary)', padding: '4px 4px 4px 12px',
-              borderRadius: 30, border: '1px solid var(--border-default)',
-              cursor: 'pointer', transition: 'all 0.2s ease'
+              width: 36, height: 36, borderRadius: '50%',
+              background: 'var(--accent)', color: 'var(--text-inverse)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontWeight: 600, fontSize: '0.9375rem', flexShrink: 0,
+              cursor: 'pointer', transition: 'all 0.2s ease',
+              border: '2px solid var(--bg-card)',
+              boxShadow: '0 0 0 1px var(--border-default)'
             }}
             title="Profile settings"
           >
-            <div className="hidden md-block" style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-              {user?.name?.split(' ')[0]}
-            </div>
-            <div
-              style={{
-                width: 32, height: 32, borderRadius: '50%',
-                background: 'var(--accent)', color: 'var(--text-inverse)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontWeight: 600, fontSize: '0.875rem', flexShrink: 0
-              }}
-            >
-              {user?.name?.charAt(0).toUpperCase() || 'U'}
-            </div>
+            {user?.name?.charAt(0).toUpperCase() || 'U'}
           </div>
         </div>
       </div>

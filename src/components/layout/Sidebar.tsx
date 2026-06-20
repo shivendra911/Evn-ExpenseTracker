@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { Logo } from '@/components/ui/Logo';
 
 // SVG line icons — 1.5px stroke, no fill, accent-blue
 const Icons = {
@@ -62,15 +63,12 @@ export function Sidebar() {
   return (
     <aside style={{ height: '100vh', display: 'flex', flexDirection: 'column', padding: '24px 16px' }}>
       {/* Brand */}
-      <div style={{ padding: '0 12px', marginBottom: 32, display: 'flex', alignItems: 'center', gap: 12 }}>
-        <img src="/logo.png" alt="Evn Logo" width={36} height={36} style={{ flexShrink: 0, objectFit: 'contain', background: '#FFFFFF', borderRadius: '50%', padding: '2px' }} />
-        <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-          Evn
-        </span>
+      <div style={{ padding: '0 12px', marginBottom: 32 }}>
+        <Logo />
       </div>
 
       {/* Nav */}
-      <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4, overflowY: 'auto', paddingBottom: 8 }}>
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
@@ -121,7 +119,7 @@ export function Sidebar() {
 
       {/* Admin Link */}
       {isAdmin && (
-        <div style={{ padding: '0 12px', marginTop: 8 }}>
+        <div style={{ padding: '16px 12px 0', marginTop: 8, borderTop: '1px solid var(--border-default)' }}>
           <Link
             href="/admin"
             style={{
@@ -150,7 +148,7 @@ export function Sidebar() {
       )}
 
       {/* Action Area */}
-      <div style={{ marginTop: 'auto', paddingTop: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ marginTop: 'auto', paddingTop: 24, display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 12px' }}>
           <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Theme</span>
           <ThemeToggle />
