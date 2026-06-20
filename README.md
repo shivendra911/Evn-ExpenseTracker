@@ -1,4 +1,4 @@
-# Expense Tracker (Splitwise Alternative)
+# Evn (Expense Tracker)
 
 A modern, full-stack expense tracking and bill-splitting application built with **Next.js**, **React**, **Tailwind CSS**, and **MongoDB**. Designed to seamlessly manage personal finances, group trips, and complex flatmate living arrangements.
 
