@@ -95,6 +95,7 @@ export default function GroupMembersTab() {
                 </div>
               </div>
 
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 {member.role === 'ADMIN' ? (
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                     <span className="badge" style={{ background: 'var(--accent-light)', color: 'var(--accent)' }}>

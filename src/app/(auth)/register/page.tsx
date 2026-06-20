@@ -180,20 +180,7 @@ export default function RegisterPage() {
       <div style={{ width: '100%', maxWidth: 400 }}>
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div
-            style={{
-              width: 48,
-              height: 48,
-              background: 'var(--accent)',
-              borderRadius: 12,
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 16,
-            }}
-          >
-            <span style={{ color: '#FFF', fontSize: '1.25rem', fontWeight: 700 }}>₹</span>
-          </div>
+          <img src="/logo.png" alt="Evn Logo" width={80} height={80} style={{ objectFit: 'contain', marginBottom: 16, background: '#FFFFFF', borderRadius: '50%', padding: '4px' }} />
           <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 4 }}>Create your account</h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem' }}>
             Start tracking expenses in seconds

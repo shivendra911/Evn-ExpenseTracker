@@ -62,10 +62,7 @@ export function Sidebar() {
     <aside style={{ height: '100vh', display: 'flex', flexDirection: 'column', padding: '24px 16px' }}>
       {/* Brand */}
       <div style={{ padding: '0 12px', marginBottom: 32, display: 'flex', alignItems: 'center', gap: 12 }}>
-        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
-          <circle cx="16" cy="16" r="13" stroke="var(--accent)" strokeWidth="2.5" />
-          <path d="M16 3 A 13 13 0 0 1 16 29 Z" fill="var(--accent)" />
-        </svg>
+        <img src="/logo.png" alt="Evn Logo" width={36} height={36} style={{ flexShrink: 0, objectFit: 'contain', background: '#FFFFFF', borderRadius: '50%', padding: '2px' }} />
         <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>
           Evn
         </span>
