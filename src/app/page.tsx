@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export const metadata = {
   title: 'Evn | Split what\'s shared. Skip what\'s not.',
@@ -44,14 +45,17 @@ export default function LandingPage() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <ThemeToggle />
           <Link href="/login" style={{ 
-            color: 'var(--text-secondary)',
-            fontWeight: 500,
+            color: 'var(--text-inverse)',
+            fontWeight: 600,
+            backgroundColor: 'var(--accent)',
             textDecoration: 'none',
-            padding: '8px 16px',
-            transition: 'color 0.2s',
+            padding: '10px 24px',
+            borderRadius: '100px',
+            transition: 'opacity 0.2s',
           }}>
-            Sign In
+            Log In
           </Link>
         </div>
       </nav>

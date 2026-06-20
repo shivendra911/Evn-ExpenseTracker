@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 // SVG line icons — 1.5px stroke, no fill, accent-blue
 const Icons = {
@@ -149,7 +150,11 @@ export function Sidebar() {
       )}
 
       {/* Action Area */}
-      <div style={{ marginTop: 'auto', paddingTop: 24 }}>
+      <div style={{ marginTop: 'auto', paddingTop: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 12px' }}>
+          <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Theme</span>
+          <ThemeToggle />
+        </div>
         <Link href="/expenses/new" className="btn btn-primary btn-full">
           + Add Expense
         </Link>

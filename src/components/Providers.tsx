@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, useEffect, type ReactNode } from 'react';
 import { useAuthStore } from '@/store/auth';
 import { ToastProvider } from './ui/Toast';
+import { ThemeProvider } from 'next-themes';
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -29,9 +30,11 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ToastProvider>
-        {children}
-      </ToastProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ToastProvider>
+          {children}
+        </ToastProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
