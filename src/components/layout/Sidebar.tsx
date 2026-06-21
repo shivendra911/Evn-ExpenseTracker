@@ -4,158 +4,122 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { Logo } from '@/components/ui/Logo';
+import { useAuthStore } from '@/store/auth';
 
-// SVG line icons — 1.5px stroke, no fill, accent-blue
 const Icons = {
-  Dashboard: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
-      <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+  Home: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
     </svg>
   ),
   Expenses: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-      <polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/>
-    </svg>
-  ),
-  Groups: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-      <circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-    </svg>
-  ),
-  Houses: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-      <polyline points="9 22 9 12 15 12 15 22"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
     </svg>
   ),
   Friends: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-      <circle cx="12" cy="7" r="4"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
     </svg>
   ),
-  Activity: () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+  Houses: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 22h20"/><path d="M17 2v20"/><path d="M7 22v-4"/><path d="M7 2v10"/><path d="M14 14h-4"/><path d="M14 10h-4"/><path d="M14 6h-4"/>
+    </svg>
+  ),
+  Analytics: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="18" y="3" width="4" height="18"/><rect x="10" y="8" width="4" height="13"/><rect x="2" y="13" width="4" height="8"/>
+    </svg>
+  ),
+  Settings: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  ),
+  Toggle: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 18l6-6-6-6" />
     </svg>
   ),
 };
 
 const NAV_ITEMS = [
-  { href: '/dashboard', label: 'Dashboard', Icon: Icons.Dashboard },
-  { href: '/expenses', label: 'My Expenses', Icon: Icons.Expenses },
-  { href: '/groups', label: 'Groups', Icon: Icons.Groups },
-  { href: '/houses', label: 'Houses', Icon: Icons.Houses },
+  { href: '/dashboard', label: 'Home', Icon: Icons.Home },
+  { href: '/expenses', label: 'Expenses', Icon: Icons.Expenses },
   { href: '/friends', label: 'Friends', Icon: Icons.Friends },
-  { href: '/activity', label: 'Activity', Icon: Icons.Activity },
+  { href: '/houses', label: 'Houses', Icon: Icons.Houses },
+  { href: '/activity', label: 'Analytics', Icon: Icons.Analytics },
+  { href: '/profile', label: 'Settings', Icon: Icons.Settings },
 ];
 
-import { useAuthStore } from '@/store/auth';
+interface SidebarProps {
+  isCollapsed: boolean;
+  onToggle: () => void;
+}
 
-export function Sidebar() {
+export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
   const pathname = usePathname();
   const { user } = useAuthStore();
   const isAdmin = user?.email === 'promtengineering5@gmail.com' || user?.isAdmin;
 
   return (
-    <aside style={{ height: '100vh', display: 'flex', flexDirection: 'column', padding: '24px 16px' }}>
+    <aside className="h-screen flex flex-col pt-6 pb-6 relative transition-all duration-300">
+      {/* Toggle Button */}
+      <button 
+        onClick={onToggle}
+        className="absolute -right-3 top-6 bg-white border border-[var(--border-default)] rounded-full p-1 shadow-sm text-gray-500 hover:text-black z-10"
+        style={{ transform: isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)' }}
+      >
+        <Icons.Toggle />
+      </button>
+
       {/* Brand */}
-      <div style={{ padding: '0 12px', marginBottom: 32 }}>
-        <Logo />
+      <div className={`px-4 mb-8 flex items-center ${isCollapsed ? 'justify-center' : ''}`}>
+        {isCollapsed ? (
+          <div className="w-8 h-8 flex items-center justify-center bg-[var(--accent)] text-white rounded-full font-bold">
+            E
+          </div>
+        ) : (
+          <Logo />
+        )}
       </div>
 
       {/* Nav */}
-      <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4, overflowY: 'auto', paddingBottom: 8 }}>
+      <nav className="flex-1 px-3 space-y-1 overflow-y-auto pb-4 overflow-x-hidden">
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
             <Link
               key={item.href}
               href={item.href}
-              style={{
-                position: 'relative',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                padding: '9px 12px',
-                borderRadius: 'var(--radius-sm)',
-                background: isActive ? 'var(--bg-active)' : 'transparent',
-                color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
-                fontWeight: isActive ? 600 : 400,
-                fontSize: '0.9375rem',
-                textDecoration: 'none',
-                transition: 'all 0.15s ease',
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive) e.currentTarget.style.background = 'var(--bg-hover)';
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) e.currentTarget.style.background = 'transparent';
-              }}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group relative ${
+                isActive ? 'bg-[var(--accent-light)] text-[var(--accent)] font-semibold' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+              } ${isCollapsed ? 'justify-center px-0' : ''}`}
+              title={isCollapsed ? item.label : undefined}
             >
-              <span style={{ opacity: isActive ? 1 : 0.6, flexShrink: 0 }}>
+              <span className={`shrink-0 ${isActive ? 'text-[var(--accent)]' : 'text-gray-500 group-hover:text-gray-900'}`}>
                 <item.Icon />
               </span>
-              <span style={{ flex: 1 }}>{item.label}</span>
-              {isActive && (
-                <div style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  width: 3,
-                  height: 20,
-                  background: 'var(--accent)',
-                  borderRadius: '0 4px 4px 0',
-                }} />
+              
+              {!isCollapsed && (
+                <span className="flex-1 truncate">{item.label}</span>
+              )}
+              
+              {isActive && !isCollapsed && (
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[var(--accent)] rounded-r-md" />
               )}
             </Link>
           );
         })}
       </nav>
 
-      {/* Admin Link */}
-      {isAdmin && (
-        <div style={{ padding: '16px 12px 0', marginTop: 8, borderTop: '1px solid var(--border-default)' }}>
-          <Link
-            href="/admin"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              padding: '9px 12px',
-              borderRadius: 'var(--radius-sm)',
-              background: 'linear-gradient(to right, rgba(99, 102, 241, 0.1), transparent)',
-              color: 'var(--accent)',
-              fontWeight: 600,
-              fontSize: '0.9375rem',
-              textDecoration: 'none',
-              border: '1px solid rgba(99, 102, 241, 0.2)',
-            }}
-          >
-            <span style={{ flexShrink: 0 }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
-                <rect x="14" y="14" width="7" height="7" rx="1"/><path d="M3 14h7v7H3z"/>
-              </svg>
-            </span>
-            <span style={{ flex: 1 }}>Admin Panel</span>
-          </Link>
-        </div>
-      )}
-
       {/* Action Area */}
-      <div style={{ marginTop: 'auto', paddingTop: 24, display: 'flex', flexDirection: 'column', gap: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 12px' }}>
-          <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Theme</span>
+      <div className={`mt-auto px-4 flex flex-col gap-4 ${isCollapsed ? 'items-center' : ''}`}>
+        <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
+          {!isCollapsed && <span className="text-sm text-gray-500">Theme</span>}
           <ThemeToggle />
         </div>
-        <Link href="/expenses/new" className="btn btn-primary btn-full">
-          + Add Expense
-        </Link>
       </div>
     </aside>
   );

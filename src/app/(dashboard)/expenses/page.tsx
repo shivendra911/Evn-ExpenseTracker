@@ -72,38 +72,26 @@ export default function ExpensesPage() {
           {data?.items.map((expense, idx) => (
             <div
               key={expense.id}
-              className="row-hover"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 16,
-                padding: '14px 20px',
-                borderBottom: idx < (data.items.length - 1) ? '1px solid var(--border-default)' : 'none',
-              }}
+              className="row-hover flex items-center gap-3 p-4 border-b border-[var(--border-default)] last:border-0"
             >
               {/* Category icon */}
-              <div style={{
-                width: 40, height: 40, borderRadius: 'var(--radius-md)',
-                background: 'var(--bg-secondary)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.1rem', flexShrink: 0,
-              }}>
+              <div className="w-10 h-10 rounded-lg shrink-0 flex items-center justify-center bg-[var(--bg-secondary)] text-lg">
                 {categoryIcon(expense.category)}
               </div>
 
               {/* Main info */}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontWeight: 500, marginBottom: 3 }} className="truncate">{expense.title}</div>
-                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{formatDateTime(expense.date)}</div>
+              <div className="flex-1 min-w-0">
+                <div className="font-medium text-gray-900 truncate mb-0.5">{expense.title}</div>
+                <div className="text-xs text-gray-500 truncate">{formatDateTime(expense.date)}</div>
               </div>
 
-              {/* Category badge */}
-              <span className={`badge ${categoryClass(expense.category)}`} style={{ flexShrink: 0 }}>
+              {/* Category badge (Hidden on mobile) */}
+              <span className={`badge ${categoryClass(expense.category)} hidden sm:inline-flex shrink-0`}>
                 {expense.category.replace('_', ' ')}
               </span>
 
               {/* Amount */}
-              <div style={{ fontWeight: 700, fontSize: '1rem', flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}>
+              <div className="font-bold tabular-nums text-gray-900 text-right shrink-0 ml-2">
                 {formatCurrency(expense.amountPaise)}
               </div>
             </div>

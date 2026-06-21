@@ -70,49 +70,37 @@ export default function GroupExpensesTab() {
             return (
               <div
                 key={expense.id}
-                className="row-hover"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 14,
-                  padding: '14px 20px',
-                  borderBottom: idx < (data.items.length - 1) ? '1px solid var(--border-default)' : 'none',
-                }}
+                className="row-hover flex items-center gap-3 p-4 border-b border-[var(--border-default)] last:border-0"
               >
                 {/* Icon */}
-                <div style={{
-                  width: 38, height: 38, borderRadius: 'var(--radius-md)',
-                  background: isSettlement ? 'var(--positive-bg)' : 'var(--bg-secondary)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '1rem', flexShrink: 0,
-                }}>
+                <div className={`w-10 h-10 rounded-lg shrink-0 flex items-center justify-center text-lg ${isSettlement ? 'bg-[var(--positive-bg)]' : 'bg-[var(--bg-secondary)]'}`}>
                   {isSettlement ? '💸' : (CATEGORY_ICONS[expense.category] || '🧾')}
                 </div>
 
                 {/* Info */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 500, marginBottom: 3 }} className="truncate">{expense.title}</div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', gap: 8, alignItems: 'center' }}>
-                    <span>{formatDateTime(expense.date)}</span>
-                    <span>•</span>
-                    <span>by {expense.createdByName}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-gray-900 truncate mb-0.5">{expense.title}</div>
+                  <div className="text-xs text-gray-500 flex items-center gap-1.5 truncate">
+                    <span className="shrink-0">{formatDateTime(expense.date)}</span>
+                    <span className="shrink-0">•</span>
+                    <span className="truncate">by {expense.createdByName}</span>
                   </div>
                 </div>
 
-                {/* Badges */}
+                {/* Badges (Hidden on mobile) */}
                 {!isSettlement && (
-                  <span className={`badge ${categoryClass(expense.category)}`} style={{ flexShrink: 0 }}>
+                  <span className={`badge ${categoryClass(expense.category)} hidden sm:inline-flex shrink-0`}>
                     {expense.category.replace('_', ' ')}
                   </span>
                 )}
 
                 {/* Amounts */}
-                <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <div style={{ fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{formatCurrency(expense.totalPaise)}</div>
-                  <div style={{ fontSize: '0.75rem', marginTop: 2 }}>
-                    {myContrib > 0 && <span style={{ color: 'var(--positive)' }}>+{formatCurrency(myContrib)} paid</span>}
-                    {myShare > 0 && <span style={{ color: 'var(--negative)', marginLeft: myContrib > 0 ? 6 : 0 }}>−{formatCurrency(myShare)} share</span>}
-                    {myContrib === 0 && myShare === 0 && <span style={{ color: 'var(--text-muted)' }}>not involved</span>}
+                <div className="text-right shrink-0 ml-2">
+                  <div className="font-bold tabular-nums text-gray-900">{formatCurrency(expense.totalPaise)}</div>
+                  <div className="text-xs mt-1 flex flex-col items-end">
+                    {myContrib > 0 && <span className="text-green-600">+{formatCurrency(myContrib)} paid</span>}
+                    {myShare > 0 && <span className="text-red-600">−{formatCurrency(myShare)} share</span>}
+                    {myContrib === 0 && myShare === 0 && <span className="text-gray-400">not involved</span>}
                   </div>
                 </div>
               </div>

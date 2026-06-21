@@ -7,13 +7,14 @@ import { apiGet } from '@/api/client';
 import { useAuthStore } from '@/store/auth';
 import { useToast } from '@/components/ui/Toast';
 import { formatCurrency } from '@/lib/money';
-import { formatDateTime } from '@/lib/dates';
+import { Avatar } from '@/components/ui/Avatar';
 import type { GroupResponse } from '@/shared/types';
 
 interface FriendBalance {
   userId: string;
   name: string;
   email: string;
+  handle: string | null;
   avatarUrl: string | null;
   netPaise: number; // positive = they owe you, negative = you owe them
   groups: string[];
@@ -26,17 +27,14 @@ function computeFriendBalances(groups: any[]): FriendBalance[] {
     if (!group.balances) continue;
 
     for (const bal of group.balances) {
-      // Skip self
       if (!bal.user) continue;
 
-      const existing = friendMap.get(bal.user.id);
-      if (existing) {
-        // Don't add balance here — we'll calculate from settlement plans
-      } else {
+      if (!friendMap.has(bal.user.id)) {
         friendMap.set(bal.user.id, {
           userId: bal.user.id,
           name: bal.user.name,
           email: '',
+          handle: bal.user.handle,
           avatarUrl: bal.user.avatarUrl,
           netPaise: 0,
           groups: [],
@@ -44,11 +42,9 @@ function computeFriendBalances(groups: any[]): FriendBalance[] {
       }
     }
 
-    // Use the settlement plan to figure out who owes whom
     if (group.settlementPlan) {
       for (const plan of group.settlementPlan) {
         if (plan.fromUser && plan.toUser) {
-          // fromUser owes toUser
           const from = friendMap.get(plan.fromUser.id);
           const to = friendMap.get(plan.toUser.id);
           if (from) {
@@ -73,8 +69,8 @@ export default function FriendsPage() {
   const { toastSuccess, toastError } = useToast();
 
   const [addFriendInput, setAddFriendInput] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Fetch pending requests
   const { data: requests, isLoading: requestsLoading } = useQuery({
     queryKey: ['friendRequests'],
     queryFn: () => apiGet<{ incoming: any[]; outgoing: any[] }>('/api/friends/requests'),
@@ -125,18 +121,16 @@ export default function FriendsPage() {
     addFriendMutation.mutate(addFriendInput);
   };
 
-  // Fetch all groups first
   const { data: groups, isLoading: groupsLoading } = useQuery({
     queryKey: ['groups'],
     queryFn: () => apiGet<GroupResponse[]>('/api/groups'),
   });
 
-  // Fetch balances for each group
   const { data: groupBalances, isLoading: balancesLoading } = useQuery({
     queryKey: ['allGroupBalances', groups?.map(g => g.id)],
     queryFn: async () => {
       if (!groups || groups.length === 0) return [];
-      const results = await Promise.all(
+      return Promise.all(
         groups.map(async (g) => {
           try {
             const bal = await apiGet<any>(`/api/groups/${g.id}/balances`);
@@ -146,41 +140,45 @@ export default function FriendsPage() {
           }
         })
       );
-      return results;
     },
     enabled: !!groups && groups.length > 0,
   });
 
   const isLoading = groupsLoading || balancesLoading;
   const friends = groupBalances ? computeFriendBalances(groupBalances).filter(f => f.userId !== user?.id) : [];
+  
+  const filteredFriends = friends.filter(f => 
+    f.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    (f.handle && f.handle.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
 
   const totalOwed = friends.reduce((sum, f) => f.netPaise > 0 ? sum + f.netPaise : sum, 0);
   const totalOwe = friends.reduce((sum, f) => f.netPaise < 0 ? sum + Math.abs(f.netPaise) : sum, 0);
 
   return (
-    <div>
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Friends</h1>
-          <p style={{ color: 'var(--text-secondary)' }}>People you split expenses with</p>
-        </div>
+    <div className="max-w-3xl mx-auto">
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-heading m-0">Friends</h1>
+        <button className="btn btn-primary bg-indigo-600 hover:bg-indigo-700">+ Add Friend</button>
       </div>
 
-      {/* Add Friend Section */}
-      <div className="card" style={{ padding: 24, marginBottom: 24 }}>
-        <h3 style={{ fontSize: '1rem', marginBottom: 12 }}>Add a friend directly</h3>
-        <form onSubmit={handleAddFriend} style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <input
-            type="text"
-            placeholder="Enter their ID (e.g. AB12CD) or @handle"
-            value={addFriendInput}
-            onChange={(e) => setAddFriendInput(e.target.value)}
-            style={{ maxWidth: 300 }}
-            required
-          />
+      {/* Add Friend Input Card */}
+      <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6 shadow-sm">
+        <form onSubmit={handleAddFriend} className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">👤</span>
+            <input
+              type="text"
+              placeholder="Enter ID (e.g. AB12CD) or @handle to add..."
+              value={addFriendInput}
+              onChange={(e) => setAddFriendInput(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
+              required
+            />
+          </div>
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn btn-primary sm:w-auto w-full"
             disabled={addFriendMutation.isPending || !addFriendInput.trim()}
           >
             {addFriendMutation.isPending ? 'Sending...' : 'Send Request'}
@@ -190,50 +188,32 @@ export default function FriendsPage() {
 
       {/* Pending Requests */}
       {!requestsLoading && requests?.incoming && requests.incoming.length > 0 && (
-        <div style={{ marginBottom: 32 }}>
-          <h3 style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: 12, paddingLeft: 4 }}>
-            Pending Requests ({requests.incoming.length})
-          </h3>
-          <div className="card" style={{ overflow: 'hidden' }}>
-            {requests.incoming.map((req: any, idx: number) => (
-              <div
-                key={req.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '16px 20px',
-                  borderBottom: idx < requests.incoming.length - 1 ? '1px solid var(--border-default)' : 'none',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div style={{
-                    width: 40, height: 40, borderRadius: '50%',
-                    background: 'var(--border-default)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: 'var(--text-primary)', fontWeight: 600, fontSize: '1rem',
-                  }}>
-                    {req.fromUser.name.charAt(0).toUpperCase()}
-                  </div>
+        <div className="mb-8">
+          <h3 className="text-subtitle mb-4 text-gray-700">Pending Requests ({requests.incoming.length})</h3>
+          <div className="grid gap-4">
+            {requests.incoming.map((req: any) => (
+              <div key={req.id} className="bg-white rounded-xl border border-indigo-100 p-4 shadow-sm flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Avatar name={req.fromUser.name} size="md" />
                   <div>
-                    <div style={{ fontWeight: 600 }}>{req.fromUser.name}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      {req.fromUser.handle ? `@${req.fromUser.handle}` : `#${req.fromUser.uniqueId}`} wants to be friends
+                    <div className="font-semibold">{req.fromUser.name}</div>
+                    <div className="text-xs text-gray-500">
+                      {req.fromUser.handle ? `@${req.fromUser.handle}` : `#${req.fromUser.uniqueId}`}
                     </div>
                   </div>
                 </div>
-                <div style={{ display: 'flex', gap: 8 }}>
+                <div className="flex gap-2">
                   <button 
-                    className="btn btn-secondary btn-sm"
                     onClick={() => respondMutation.mutate({ id: req.id, action: 'DECLINE' })}
                     disabled={respondMutation.isPending}
+                    className="px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
                   >
                     Decline
                   </button>
                   <button 
-                    className="btn btn-primary btn-sm"
                     onClick={() => respondMutation.mutate({ id: req.id, action: 'ACCEPT' })}
                     disabled={respondMutation.isPending}
+                    className="px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition-colors"
                   >
                     Accept
                   </button>
@@ -244,136 +224,80 @@ export default function FriendsPage() {
         </div>
       )}
 
-      {/* Outgoing Requests */}
-      {!requestsLoading && requests?.outgoing && requests.outgoing.length > 0 && (
-        <div style={{ marginBottom: 32 }}>
-          <h3 style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: 12, paddingLeft: 4 }}>
-            Sent Requests
-          </h3>
-          <div className="card" style={{ overflow: 'hidden' }}>
-            {requests.outgoing.map((req: any, idx: number) => (
-              <div
-                key={req.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '16px 20px',
-                  borderBottom: idx < requests.outgoing.length - 1 ? '1px solid var(--border-default)' : 'none',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div style={{
-                    width: 40, height: 40, borderRadius: '50%',
-                    background: 'var(--border-default)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: 'var(--text-primary)', fontWeight: 600, fontSize: '1rem',
-                    opacity: 0.7
-                  }}>
-                    {req.toUser.name.charAt(0).toUpperCase()}
-                  </div>
-                  <div style={{ opacity: 0.7 }}>
-                    <div style={{ fontWeight: 600 }}>{req.toUser.name}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      Request sent to {req.toUser.handle ? `@${req.toUser.handle}` : `#${req.toUser.uniqueId}`}
-                    </div>
-                  </div>
-                </div>
-                <span className="badge badge-neutral">Pending</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Summary Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 32 }}>
-        <div className="card" style={{ padding: 20 }}>
-          <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: 8 }}>You are owed</div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--positive)' }}>{formatCurrency(totalOwed)}</div>
+      <div className="grid grid-cols-2 gap-4 mb-8">
+        <div className="bg-white rounded-xl border border-red-100 p-5 shadow-sm">
+          <div className="text-sm font-medium text-red-600/80 mb-1">You owe</div>
+          <div className="text-2xl font-bold text-red-600">{formatCurrency(totalOwe)}</div>
         </div>
-        <div className="card" style={{ padding: 20 }}>
-          <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: 8 }}>You owe</div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--negative)' }}>{formatCurrency(totalOwe)}</div>
-        </div>
-        <div className="card" style={{ padding: 20 }}>
-          <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: 8 }}>Net balance</div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 700, color: totalOwed - totalOwe >= 0 ? 'var(--positive)' : 'var(--negative)' }}>
-            {totalOwed - totalOwe >= 0 ? '+' : ''}{formatCurrency(totalOwed - totalOwe)}
-          </div>
+        <div className="bg-white rounded-xl border border-green-100 p-5 shadow-sm">
+          <div className="text-sm font-medium text-green-600/80 mb-1">You get</div>
+          <div className="text-2xl font-bold text-green-600">{formatCurrency(totalOwed)}</div>
         </div>
       </div>
 
-      <h3 style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: 12, paddingLeft: 4 }}>
-        Your Friends
-      </h3>
+      <h3 className="text-title mb-4">Recent Friends</h3>
+      
+      {/* Search Friends */}
+      <div className="relative mb-6">
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+        <input
+          type="text"
+          placeholder="Search friends..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+        />
+      </div>
 
       {/* Friends List */}
       {isLoading ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {[1, 2, 3].map(i => <div key={i} className="card skeleton" style={{ height: 72 }} />)}
+        <div className="grid gap-4">
+          {[1, 2, 3].map(i => <div key={i} className="bg-white rounded-xl border border-gray-100 h-24 animate-pulse" />)}
         </div>
-      ) : friends.length === 0 ? (
-        <div className="card empty-state" style={{ padding: 48 }}>
-          <span className="empty-state-icon">👤</span>
-          <h3 className="empty-state-title">No friends yet</h3>
-          <p className="empty-state-description">
-            Friends appear automatically when you join groups and split expenses with others.
-          </p>
+      ) : filteredFriends.length === 0 ? (
+        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center text-gray-500">
+          <div className="text-4xl mb-4">👥</div>
+          <p className="text-lg font-medium text-gray-800">No friends found</p>
+          <p className="text-sm mt-1">Try searching for someone else or add a new friend.</p>
         </div>
       ) : (
-        <div className="card" style={{ overflow: 'hidden' }}>
-          {friends.map((friend, idx) => (
-            <Link
-              href={`/friends/${friend.userId}`}
-              key={friend.userId}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '16px 20px',
-                borderBottom: idx < friends.length - 1 ? '1px solid var(--border-default)' : 'none',
-                textDecoration: 'none',
-                color: 'inherit',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-hover)'}
-              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div style={{
-                  width: 40, height: 40, borderRadius: '50%',
-                  background: 'linear-gradient(135deg, var(--accent), #8b5cf6)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#FFF', fontWeight: 700, fontSize: '1rem',
-                }}>
-                  {friend.name.charAt(0).toUpperCase()}
+        <div className="grid gap-4 sm:grid-cols-2">
+          {filteredFriends.map((friend) => (
+            <div key={friend.userId} className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all group">
+              <div className="flex items-start gap-4 mb-4">
+                <Avatar name={friend.name} size="lg" />
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-gray-900 truncate">{friend.name}</div>
+                  {friend.handle && <div className="text-sm text-gray-500 truncate">@{friend.handle}</div>}
                 </div>
+              </div>
+              
+              <div className="border-t border-gray-100 pt-3 flex items-center justify-between">
                 <div>
-                  <div style={{ fontWeight: 600 }}>{friend.name}</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                    {friend.groups.filter(g => !g.startsWith('Friendship: ')).length > 0 
-                      ? friend.groups.filter(g => !g.startsWith('Friendship: ')).join(', ') 
-                      : 'Direct Friend'}
-                  </div>
+                  {friend.netPaise === 0 ? (
+                    <div className="flex items-center gap-1.5 text-sm font-medium text-gray-500">
+                      <span>Settled</span> <span className="text-green-500">✓</span>
+                    </div>
+                  ) : friend.netPaise > 0 ? (
+                    <div className="flex items-center gap-1.5 text-sm font-medium text-green-600">
+                      <span>Gets</span> <span>{formatCurrency(friend.netPaise)}</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5 text-sm font-medium text-red-600">
+                      <span>Owes</span> <span>{formatCurrency(Math.abs(friend.netPaise))}</span>
+                    </div>
+                  )}
                 </div>
+                
+                <Link 
+                  href={`/friends/${friend.userId}`}
+                  className="text-sm font-medium text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  View →
+                </Link>
               </div>
-              <div style={{ textAlign: 'right' }}>
-                {friend.netPaise === 0 ? (
-                  <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>settled up</span>
-                ) : friend.netPaise > 0 ? (
-                  <>
-                    <div style={{ fontWeight: 700, color: 'var(--positive)' }}>{formatCurrency(friend.netPaise)}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>owes you</div>
-                  </>
-                ) : (
-                  <>
-                    <div style={{ fontWeight: 700, color: 'var(--negative)' }}>{formatCurrency(Math.abs(friend.netPaise))}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>you owe</div>
-                  </>
-                )}
-              </div>
-            </Link>
+            </div>
           ))}
         </div>
       )}

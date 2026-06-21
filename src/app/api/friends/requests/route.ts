@@ -60,6 +60,7 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
         OR: [
           { uniqueId: identifier },
           { handle: handleStr },
+          { email: identifier },
         ]
       }
     });
