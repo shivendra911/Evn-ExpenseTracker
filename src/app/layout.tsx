@@ -14,6 +14,8 @@ export const metadata: Metadata = {
     'Track personal expenses, split group bills, and settle debts with friends. Built for flatmates, trips, and everyday shared expenses.',
 };
 
+import NextTopLoader from 'nextjs-toploader';
+
 export default function RootLayout({
   children,
 }: {
@@ -22,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <body className="font-sans">
+        <NextTopLoader color="var(--accent)" height={3} showSpinner={false} />
         <Providers>{children}</Providers>
       </body>
     </html>
