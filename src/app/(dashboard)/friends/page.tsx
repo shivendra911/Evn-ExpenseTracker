@@ -248,7 +248,11 @@ export default function FriendsPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {filteredFriends.map((friend) => (
-            <div key={friend.userId} className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all group">
+            <Link
+              key={friend.userId}
+              href={`/friends/${friend.userId}`}
+              className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all group block"
+            >
               <div className="flex items-start gap-4 mb-4">
                 <Avatar name={friend.name} size="lg" />
                 <div className="flex-1 min-w-0">
@@ -274,14 +278,11 @@ export default function FriendsPage() {
                   )}
                 </div>
                 
-                <Link 
-                  href={`/friends/${friend.userId}`}
-                  className="text-sm font-medium text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                >
+                <span className="text-sm font-medium text-indigo-600 transition-opacity">
                   View →
-                </Link>
+                </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

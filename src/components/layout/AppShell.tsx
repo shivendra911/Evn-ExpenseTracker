@@ -10,33 +10,24 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: 'var(--bg-primary)' }}>
+    <div className="flex h-screen overflow-hidden bg-[var(--bg-primary)]">
       {/* Sidebar for Desktop */}
       <div 
-        className="hidden md-block transition-all duration-300 ease-in-out" 
-        style={{ 
-          width: isCollapsed ? 64 : 240, 
-          flexShrink: 0, 
-          borderRight: '1px solid var(--border-default)', 
-          background: 'var(--bg-card)',
-          position: 'relative',
-          zIndex: 40
-        }}
+        className="hidden md:block transition-all duration-300 ease-in-out shrink-0 border-r border-[var(--border-default)] bg-[var(--bg-card)] relative z-40" 
+        style={{ width: isCollapsed ? 64 : 240 }}
       >
         <Sidebar isCollapsed={isCollapsed} onToggle={() => setIsCollapsed(!isCollapsed)} />
       </div>
 
       {/* Sidebar for Mobile (Slide-over drawer) */}
       {isMobileMenuOpen && (
-        <div className="md-hidden fixed inset-0 z-50 flex">
+        <div className="md:hidden fixed inset-0 z-50 flex">
           <div 
             className="fixed inset-0 bg-black/50 transition-opacity"
             onClick={() => setIsMobileMenuOpen(false)}
           />
           <div className="relative flex w-64 max-w-xs flex-1 flex-col bg-[var(--bg-card)] h-full overflow-hidden shadow-2xl">
-            {/* Override the Sidebar's absolute toggle button on mobile to act as a close button inside the drawer if needed, but it works fine as is */}
             <div className="w-full h-full overflow-y-auto" onClick={(e) => {
-              // Close menu if a link is clicked
               if ((e.target as HTMLElement).closest('a')) {
                 setIsMobileMenuOpen(false);
               }
@@ -48,12 +39,12 @@ export function AppShell({ children }: { children: ReactNode }) {
       )}
 
       {/* Main Content Area */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, position: 'relative' }}>
+      <div className="flex-1 flex flex-col min-w-0 relative">
         {/* Header (Desktop + Mobile) */}
         <Header onMenuToggle={() => setIsMobileMenuOpen(true)} />
 
         {/* Scrollable Content Area */}
-        <main style={{ flex: 1, overflowY: 'auto', paddingBottom: 80 }}>
+        <main className="flex-1 overflow-y-auto pb-[70px] md:pb-0">
           <div className="page-container">
             {children}
           </div>
@@ -61,20 +52,9 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
 
       {/* Bottom Nav for Mobile */}
-      <div className="md-hidden" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 40 }}>
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40">
         <BottomNav />
       </div>
-
-      <style jsx>{`
-        .hidden { display: none; }
-        @media (min-width: 768px) {
-          .md-block { display: block !important; }
-          .md-hidden { display: none !important; }
-        }
-        @media (max-width: 767px) {
-          main { padding-bottom: 70px; }
-        }
-      `}</style>
     </div>
   );
 }

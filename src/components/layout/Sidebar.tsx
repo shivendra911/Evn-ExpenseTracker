@@ -17,9 +17,14 @@ const Icons = {
       <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
     </svg>
   ),
-  Friends: () => (
+  Groups: () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+  ),
+  Friends: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
     </svg>
   ),
   Houses: () => (
@@ -52,6 +57,7 @@ const Icons = {
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Home', Icon: Icons.Home },
   { href: '/expenses', label: 'Expenses', Icon: Icons.Expenses },
+  { href: '/groups', label: 'Groups', Icon: Icons.Groups },
   { href: '/friends', label: 'Friends', Icon: Icons.Friends },
   { href: '/houses', label: 'Houses', Icon: Icons.Houses },
   { href: '/activity', label: 'Analytics', Icon: Icons.Analytics },
