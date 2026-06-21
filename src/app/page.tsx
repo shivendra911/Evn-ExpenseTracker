@@ -176,15 +176,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* 5. Trust / credibility strip */}
-        <section className="py-12 md:py-16 px-5 max-w-4xl mx-auto w-full">
-          <div className="flex flex-col md:flex-row flex-wrap gap-4 md:gap-8 text-[var(--text-muted)] text-sm font-mono leading-relaxed">
-            <div>// Open about how it works</div>
-            <div>[Integer Paise Math] No floating point rounding bugs.</div>
-            <div>[JWT Auth] Rotating refresh tokens for security.</div>
-            <div>[Bcrypt] Salted password hashing.</div>
-          </div>
-        </section>
 
         {/* 6. Friends & Groups */}
         <section className="py-12 md:py-24 px-5 max-w-4xl mx-auto w-full border-t border-[var(--border-default)]">
