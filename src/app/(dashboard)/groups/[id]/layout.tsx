@@ -79,7 +79,7 @@ export default function GroupDetailLayout({ children }: { children: ReactNode })
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-4 sm:gap-6 mt-6 border-b border-[var(--border-default)] overflow-x-auto">
+        <div className="flex gap-4 sm:gap-6 mt-6 border-b border-[var(--border-default)] overflow-x-auto no-scrollbar">
           {tabs.map((tab) => {
             const active = isExactPath(tab.href);
             return (

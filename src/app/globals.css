@@ -568,4 +568,12 @@ td.money-cell {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 } /* end @layer components */
