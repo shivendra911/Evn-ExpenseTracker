@@ -56,7 +56,7 @@ export default function GroupDetailLayout({ children }: { children: ReactNode })
   return (
     <div>
       {/* Group Header */}
-      <div className="card" style={{ padding: 24, marginBottom: 24 }}>
+      <div className="card p-4 sm:p-6 mb-6">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-3 mb-2">
@@ -79,22 +79,18 @@ export default function GroupDetailLayout({ children }: { children: ReactNode })
         </div>
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: 24, marginTop: 24, borderBottom: '1px solid var(--border-default)' }}>
+        <div className="flex gap-4 sm:gap-6 mt-6 border-b border-[var(--border-default)] overflow-x-auto">
           {tabs.map((tab) => {
             const active = isExactPath(tab.href);
             return (
               <Link
                 key={tab.name}
                 href={tab.href}
-                style={{
-                  padding: '12px 4px',
-                  color: active ? 'var(--accent)' : 'var(--text-secondary)',
-                  fontWeight: active ? 600 : 500,
-                  textDecoration: 'none',
-                  borderBottom: active ? '2px solid var(--accent)' : '2px solid transparent',
-                  marginBottom: '-1px',
-                  transition: 'all 0.2s',
-                }}
+                className={`whitespace-nowrap pb-3 text-sm sm:text-base font-medium transition-colors border-b-2 -mb-[1px] ${
+                  active 
+                    ? 'border-[var(--accent)] text-[var(--accent)]' 
+                    : 'border-transparent text-[var(--text-secondary)] hover:text-gray-800'
+                }`}
               >
                 {tab.name}
               </Link>
