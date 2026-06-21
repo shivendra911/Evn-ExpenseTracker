@@ -26,7 +26,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             className="fixed inset-0 bg-black/50 transition-opacity"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          <div className="relative flex w-64 max-w-xs flex-1 flex-col bg-[var(--bg-card)] h-full overflow-hidden shadow-2xl">
+          <div className="relative flex w-[280px] max-w-[80vw] flex-col bg-[var(--bg-card)] h-full overflow-hidden shadow-2xl animate-in slide-in-from-left-full duration-300">
             <div className="w-full h-full overflow-y-auto" onClick={(e) => {
               if ((e.target as HTMLElement).closest('a')) {
                 setIsMobileMenuOpen(false);
@@ -41,7 +41,10 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 relative">
         {/* Header (Desktop + Mobile) */}
-        <Header onMenuToggle={() => setIsMobileMenuOpen(true)} />
+        <Header 
+          onMenuToggle={() => setIsMobileMenuOpen(true)} 
+          onDesktopMenuToggle={() => setIsCollapsed(!isCollapsed)}
+        />
 
         {/* Scrollable Content Area */}
         <main className="flex-1 overflow-y-auto pb-[110px] md:pb-0">

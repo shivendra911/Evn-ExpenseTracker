@@ -24,7 +24,7 @@ const QuickActions = [
   { label: 'Friend', href: '/friends', icon: '👤' }, // Could link to a specific add friend modal/page
 ];
 
-export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
+export function Header({ onMenuToggle, onDesktopMenuToggle }: { onMenuToggle?: () => void, onDesktopMenuToggle?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, clearAuth } = useAuthStore();
@@ -54,8 +54,20 @@ export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
           </svg>
         </button>
 
-        {/* Mobile brand logo (hidden on desktop) */}
-        <div className="md:hidden block">
+        {/* Desktop menu toggle */}
+        <button 
+          onClick={onDesktopMenuToggle}
+          className="hidden md:flex items-center justify-center p-1.5 -ml-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        {/* Brand logo */}
+        <div className="block md:hidden">
           <Logo className="scale-90 origin-left" />
         </div>
         <h1 className="hidden md:block text-title m-0">

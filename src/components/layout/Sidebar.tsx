@@ -76,15 +76,6 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
 
   return (
     <aside className="h-screen flex flex-col pt-6 pb-6 relative transition-all duration-300">
-      {/* Toggle Button */}
-      <button 
-        onClick={onToggle}
-        className="absolute -right-3 top-6 bg-white border border-[var(--border-default)] rounded-full p-1 shadow-sm text-gray-500 hover:text-black z-10"
-        style={{ transform: isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)' }}
-      >
-        <Icons.Toggle />
-      </button>
-
       {/* Brand */}
       <div className={`px-4 mb-8 flex items-center ${isCollapsed ? 'justify-center' : ''}`}>
         {isCollapsed ? (
