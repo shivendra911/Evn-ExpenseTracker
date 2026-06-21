@@ -27,7 +27,7 @@ export default function LandingPage() {
       <main className="flex-1 flex flex-col pb-24">
         
         {/* 1. Hero */}
-        <section className="py-16 md:py-24 px-5 max-w-4xl mx-auto w-full">
+        <section className="py-12 md:py-24 px-5 max-w-4xl mx-auto w-full">
           <h1 className="text-4xl sm:text-5xl md:text-[4rem] font-extrabold leading-[1.1] tracking-tight mb-6 text-[var(--text-primary)]">
             Split what's shared.<br />
             Skip what's not.
@@ -76,7 +76,7 @@ export default function LandingPage() {
               {/* Row 3 - Excluded */}
               <div className="flex justify-between items-center opacity-50 group">
                 <div className="flex items-center gap-3 md:gap-4 min-w-0 pr-4">
-                  <div className="w-8 h-8 md:w-6 md:h-6 rounded border border-[var(--border-default)] flex items-center justify-center shrink-0"></div>
+                  <div className="w-8 h-8 md:w-6 md:h-6 rounded border border-[var(--text-muted)] flex items-center justify-center shrink-0"></div>
                   <span className="line-through font-medium truncate">Priya <span className="hidden sm:inline">(Out of town)</span></span>
                 </div>
                 <div className="font-mono text-sm md:text-base shrink-0">₹0.00</div>
@@ -153,7 +153,7 @@ export default function LandingPage() {
         </section>
 
         {/* 4. The House module */}
-        <section className="py-12 md:py-24 px-5 bg-[var(--bg-card)] border-y border-[var(--border-default)]">
+        <section className="py-12 md:py-24 px-5 bg-[var(--bg-card)] border-b border-[var(--border-default)]">
           <div className="max-w-4xl mx-auto w-full">
             <div className="inline-block border border-[var(--accent)] text-[var(--accent)] px-3 py-1 rounded text-sm font-bold mb-6">
               Built for flatmates
@@ -189,39 +189,13 @@ export default function LandingPage() {
             </div>
             
             {/* Code Content */}
-            <div className="p-5 md:p-8 font-mono text-sm md:text-base leading-relaxed overflow-x-auto">
-              <div className="flex">
-                <span className="text-slate-600 w-8 select-none shrink-0">1</span>
-                <span className="text-slate-400"><span className="text-[#A78BFA]">import</span> {'{'} Security, Precision {'}'} <span className="text-[#A78BFA]">from</span> <span className="text-[#34D399]">'@evn/core'</span>;</span>
-              </div>
-              <div className="flex">
-                <span className="text-slate-600 w-8 select-none shrink-0">2</span>
-                <span className="text-slate-400"></span>
-              </div>
-              <div className="flex">
-                <span className="text-slate-600 w-8 select-none shrink-0">3</span>
-                <span className="text-slate-500 italic">// Open about how it works</span>
-              </div>
-              <div className="flex">
-                <span className="text-slate-600 w-8 select-none shrink-0">4</span>
-                <span className="text-slate-300"><span className="text-[#F472B6]">export const</span> <span className="text-[#60A5FA]">features</span> = {'{'}</span>
-              </div>
-              <div className="flex">
-                <span className="text-slate-600 w-8 select-none shrink-0">5</span>
-                <span className="text-slate-300 ml-4"><span className="text-[#FCD34D]">math</span>: <span className="text-[#34D399]">'Integer Paise Math'</span>, <span className="text-slate-500 italic">// No floating point rounding bugs</span></span>
-              </div>
-              <div className="flex">
-                <span className="text-slate-600 w-8 select-none shrink-0">6</span>
-                <span className="text-slate-300 ml-4"><span className="text-[#FCD34D]">auth</span>: <span className="text-[#34D399]">'JWT with rotating refresh tokens'</span>,</span>
-              </div>
-              <div className="flex">
-                <span className="text-slate-600 w-8 select-none shrink-0">7</span>
-                <span className="text-slate-300 ml-4"><span className="text-[#FCD34D]">security</span>: <span className="text-[#34D399]">'Bcrypt salted password hashing'</span></span>
-              </div>
-              <div className="flex">
-                <span className="text-slate-600 w-8 select-none shrink-0">8</span>
-                <span className="text-slate-300">{'}'};</span>
-              </div>
+            <div className="p-5 md:p-8 font-mono text-xs md:text-base leading-relaxed overflow-x-auto">
+              <div className="flex"><span className="text-slate-600 w-8 select-none shrink-0">1</span><span className="text-slate-500 italic">// Open about how it works</span></div>
+              <div className="flex"><span className="text-slate-600 w-8 select-none shrink-0">2</span><span className="text-slate-300"><span className="text-[#F472B6]">export const</span> <span className="text-[#60A5FA]">features</span> = {'{'}</span></div>
+              <div className="flex"><span className="text-slate-600 w-8 select-none shrink-0">3</span><span className="text-slate-300 ml-4"><span className="text-[#FCD34D]">math</span>: <span className="text-[#34D399]">'Integer paise, no rounding bugs'</span>,</span></div>
+              <div className="flex"><span className="text-slate-600 w-8 select-none shrink-0">4</span><span className="text-slate-300 ml-4"><span className="text-[#FCD34D]">auth</span>: <span className="text-[#34D399]">'JWT, rotating refresh tokens'</span>,</span></div>
+              <div className="flex"><span className="text-slate-600 w-8 select-none shrink-0">5</span><span className="text-slate-300 ml-4"><span className="text-[#FCD34D]">security</span>: <span className="text-[#34D399]">'Bcrypt salted hashing'</span></span></div>
+              <div className="flex"><span className="text-slate-600 w-8 select-none shrink-0">6</span><span className="text-slate-300">{'}'};</span></div>
             </div>
           </div>
         </section>
