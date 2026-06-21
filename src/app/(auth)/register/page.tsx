@@ -25,7 +25,6 @@ export default function RegisterPage() {
   const [otp, setOtp] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const [resendStatus, setResendStatus] = useState('');
-  const [devOtp, setDevOtp] = useState('');
 
   async function handleRegisterSubmit(e: FormEvent) {
     e.preventDefault();
@@ -45,11 +44,7 @@ export default function RegisterPage() {
     setIsSubmitting(true);
 
     try {
-      const res = await registerUser({ name, email, password, confirmPassword });
-      if ((res as any).devOtp) {
-        setDevOtp((res as any).devOtp);
-        setOtp((res as any).devOtp); // Auto-fill for convenience
-      }
+      await registerUser({ name, email, password, confirmPassword });
       setIsSuccess(true);
       toastSuccess('Registration successful! Please check your email for the code.');
     } catch (err: unknown) {
@@ -109,11 +104,6 @@ export default function RegisterPage() {
         body: JSON.stringify({ email })
       });
       if (res.ok) {
-        const data = await res.json();
-        if (data.data?.devOtp) {
-          setDevOtp(data.data.devOtp);
-          setOtp(data.data.devOtp); // Auto-fill
-        }
         setResendStatus('Sent! Check your email.');
         toastSuccess('A new code has been sent to your email.');
       } else {
@@ -139,12 +129,6 @@ export default function RegisterPage() {
           <p style={{ color: 'var(--text-secondary)', marginBottom: 24, lineHeight: 1.5 }}>
             We've sent a 6-digit verification code to <strong>{email}</strong>. Please enter it below to verify your account.
           </p>
-
-          {devOtp && (
-            <div style={{ backgroundColor: '#eff6ff', color: '#1e3a8a', padding: '12px', borderRadius: '8px', marginBottom: '24px', textAlign: 'center', border: '1px solid #bfdbfe' }}>
-              <strong>Testing Mode:</strong> Your verification code is <span style={{ fontSize: '1.2em', fontWeight: 'bold', letterSpacing: '2px', marginLeft: '8px' }}>{devOtp}</span>
-            </div>
-          )}
 
           <div className="card" style={{ padding: 24, textAlign: 'left' }}>
             <form onSubmit={handleVerifySubmit}>

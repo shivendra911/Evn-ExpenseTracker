@@ -23,7 +23,6 @@ export default function LoginPage() {
   // OTP Verification State
   const [otp, setOtp] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
-  const [devOtp, setDevOtp] = useState('');
 
   async function handleResendVerification() {
     setResendStatus('Sending...');
@@ -34,11 +33,6 @@ export default function LoginPage() {
         body: JSON.stringify({ email })
       });
       if (res.ok) {
-        const data = await res.json();
-        if (data.data?.devOtp) {
-          setDevOtp(data.data.devOtp);
-          setOtp(data.data.devOtp); // Auto-fill
-        }
         setResendStatus('Sent! Check your email.');
         toastSuccess('A new code has been sent to your email.');
       } else {
@@ -132,12 +126,6 @@ export default function LoginPage() {
                   Please verify your email to log in. We sent a code to <strong>{email}</strong>.
                 </p>
               </div>
-
-              {devOtp && (
-                <div style={{ backgroundColor: '#eff6ff', color: '#1e3a8a', padding: '12px', borderRadius: '8px', marginBottom: '24px', textAlign: 'center', border: '1px solid #bfdbfe' }}>
-                  <strong>Testing Mode:</strong> Your verification code is <span style={{ fontSize: '1.2em', fontWeight: 'bold', letterSpacing: '2px', marginLeft: '8px' }}>{devOtp}</span>
-                </div>
-              )}
 
               <div className="form-group">
                 <label htmlFor="otp" style={{ textAlign: 'center', display: 'block' }}>Enter 6-digit code</label>

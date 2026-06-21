@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiGet, apiDelete } from '@/api/client';
-import { Search, Trash2, CheckCircle, XCircle, Activity } from 'lucide-react';
+import { apiGet, apiDelete, apiPost } from '@/api/client';
+import { Search, Trash2, CheckCircle, XCircle, Activity, CheckCircle2 } from 'lucide-react';
 import { useToast } from '@/components/ui/Toast';
 import { timeAgo } from '@/lib/dates';
 import { UserAnalyticsModal } from './UserAnalyticsModal';
@@ -34,6 +34,23 @@ export default function AdminUsersPage() {
   const handleDelete = (id: string, name: string) => {
     if (confirm(`Are you absolutely sure you want to permanently delete the user ${name}? This action cannot be undone.`)) {
       deleteMutation.mutate(id);
+    }
+  };
+
+  const verifyMutation = useMutation({
+    mutationFn: (id: string) => apiPost(`/api/admin/users/${id}/verify`),
+    onSuccess: () => {
+      toastSuccess('User verified successfully');
+      queryClient.invalidateQueries({ queryKey: ['adminUsers'] });
+    },
+    onError: (err: any) => {
+      toastError(err.message || 'Failed to verify user');
+    }
+  });
+
+  const handleVerify = (id: string, name: string) => {
+    if (confirm(`Are you sure you want to manually verify ${name}?`)) {
+      verifyMutation.mutate(id);
     }
   };
 
@@ -115,9 +132,22 @@ export default function AdminUsersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {user.isEmailVerified ? (
-                        <CheckCircle size={18} className="text-green-500" />
+                        <div className="flex items-center gap-1.5 text-green-500">
+                          <CheckCircle size={16} />
+                          <span>Verified</span>
+                        </div>
                       ) : (
-                        <XCircle size={18} className="text-gray-600" />
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-1.5 text-orange-400">
+                            <XCircle size={16} />
+                            <span>Unverified</span>
+                          </div>
+                          {user.verificationTokens && user.verificationTokens.length > 0 && (
+                            <div className="text-xs font-mono text-gray-400">
+                              OTP: <span className="text-white font-bold">{user.verificationTokens[0].token}</span>
+                            </div>
+                          )}
+                        </div>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -134,6 +164,16 @@ export default function AdminUsersPage() {
                       >
                         <Activity size={18} />
                       </button>
+                      {!user.isEmailVerified && (
+                        <button
+                          onClick={() => handleVerify(user.id, user.name)}
+                          disabled={verifyMutation.isPending}
+                          className="p-2 text-green-500 hover:text-green-400 hover:bg-green-500/10 rounded-lg transition-colors"
+                          title="Manually Verify User"
+                        >
+                          <CheckCircle2 size={18} />
+                        </button>
+                      )}
                       <button
                         onClick={() => handleDelete(user.id, user.name)}
                         disabled={user.email === 'promtengineering5@gmail.com' || deleteMutation.isPending}

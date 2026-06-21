@@ -35,6 +35,11 @@ export const GET = withAdmin(async (request) => {
           createdAt: true,
           avatarUrl: true,
           uniqueId: true,
+          verificationTokens: {
+            orderBy: { createdAt: 'desc' },
+            take: 1,
+            select: { token: true }
+          },
           _count: {
             select: {
               groupMembers: true,

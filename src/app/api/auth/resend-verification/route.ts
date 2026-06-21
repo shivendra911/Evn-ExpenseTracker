@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     // Send email
     await sendVerificationEmail(user.email, otp);
 
-    return successResponse({ message: 'Verification email sent', devOtp: otp });
+    return successResponse({ message: 'Verification email sent' });
   } catch (error) {
     return errorResponse(error);
   }
