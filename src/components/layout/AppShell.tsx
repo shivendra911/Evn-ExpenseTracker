@@ -44,7 +44,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <Header onMenuToggle={() => setIsMobileMenuOpen(true)} />
 
         {/* Scrollable Content Area */}
-        <main className="flex-1 overflow-y-auto pb-[70px] md:pb-0">
+        <main className="flex-1 overflow-y-auto pb-[110px] md:pb-0">
           <div className="page-container">
             {children}
           </div>

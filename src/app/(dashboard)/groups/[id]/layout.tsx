@@ -57,30 +57,22 @@ export default function GroupDetailLayout({ children }: { children: ReactNode })
     <div>
       {/* Group Header */}
       <div className="card" style={{ padding: 24, marginBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-              <h1 style={{ fontSize: '1.75rem', margin: 0 }}>{group.name}</h1>
-              <span className="badge badge-neutral">{group.type}</span>
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-3 mb-2">
+              <h1 className="text-2xl font-bold truncate text-gray-900 leading-tight m-0">{group.name}</h1>
+              <span className="badge badge-neutral shrink-0">{group.type}</span>
             </div>
             {group.description && (
-              <p style={{ color: 'var(--text-secondary)' }}>{group.description}</p>
+              <p className="text-gray-500 text-sm break-words m-0">{group.description}</p>
             )}
           </div>
           
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: 4 }}>
+          <div className="sm:text-right shrink-0">
+            <div className="text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">
               Invite Code
             </div>
-            <div style={{ 
-              background: 'var(--bg-secondary)', 
-              padding: '6px 12px', 
-              borderRadius: 'var(--radius-sm)',
-              fontFamily: 'var(--font-mono)',
-              fontWeight: 700,
-              letterSpacing: '1px',
-              color: 'var(--accent)'
-            }}>
+            <div className="bg-[var(--bg-secondary)] px-3 py-1.5 rounded-md font-mono font-bold tracking-widest text-[var(--accent)] inline-block border border-[var(--border-default)]">
               {group.inviteCode}
             </div>
           </div>
