@@ -90,53 +90,53 @@ export default function DashboardPage() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-6">
         
         {/* You Owe */}
-        <div className="bg-white rounded-xl border border-red-100 p-5 shadow-sm hover:border-red-200 transition-colors">
-          <div className="text-sm font-medium text-red-600/80 mb-2 flex items-center gap-2">
-            <span>💸</span> You owe
+        <div className="bg-white rounded-xl border border-red-100 p-4 shadow-sm hover:border-red-200 transition-colors">
+          <div className="text-xs font-medium text-red-600/80 mb-1.5 flex items-center gap-1.5 uppercase tracking-wider">
+            <span>💸</span> <span className="truncate">You owe</span>
           </div>
-          <div className="text-3xl font-bold text-red-600 tabular-nums">
+          <div className="text-2xl sm:text-3xl font-bold text-red-600 tabular-nums truncate">
             {formatCurrency(totalOwe)}
           </div>
         </div>
 
         {/* You're Owed */}
-        <div className="bg-white rounded-xl border border-green-100 p-5 shadow-sm hover:border-green-200 transition-colors">
-          <div className="text-sm font-medium text-green-600/80 mb-2 flex items-center gap-2">
-            <span>🟢</span> You're owed
+        <div className="bg-white rounded-xl border border-green-100 p-4 shadow-sm hover:border-green-200 transition-colors">
+          <div className="text-xs font-medium text-green-600/80 mb-1.5 flex items-center gap-1.5 uppercase tracking-wider">
+            <span>🟢</span> <span className="truncate">You're owed</span>
           </div>
-          <div className="text-3xl font-bold text-green-600 tabular-nums">
+          <div className="text-2xl sm:text-3xl font-bold text-green-600 tabular-nums truncate">
             {formatCurrency(totalOwed)}
           </div>
         </div>
 
         {/* Net */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:border-gray-300 transition-colors">
-          <div className="text-sm font-medium text-gray-500 mb-2 flex items-center gap-2">
-            <span>⚖</span> Net
+        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm hover:border-gray-300 transition-colors col-span-2 md:col-span-1">
+          <div className="text-xs font-medium text-gray-500 mb-1.5 flex items-center gap-1.5 uppercase tracking-wider">
+            <span>⚖</span> Net Balance
           </div>
-          <div className={`text-3xl font-bold tabular-nums ${netBalance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          <div className={`text-2xl sm:text-3xl font-bold tabular-nums truncate ${netBalance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
             {netBalance > 0 ? '+' : ''}{formatCurrency(netBalance)}
           </div>
         </div>
       </div>
 
       {/* Personal Spends Overall Summary Card */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm mb-8 flex justify-between items-center hover:border-indigo-200 transition-colors cursor-pointer" onClick={() => window.location.href = '/expenses'}>
+      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-sm mb-6 flex justify-between items-center hover:border-indigo-200 transition-colors cursor-pointer" onClick={() => window.location.href = '/expenses'}>
         <div>
-          <div className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-2">
+          <div className="text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider mb-1.5 flex items-center gap-2">
             <span className="text-indigo-600">{SVGIcons.Wallet}</span> Personal Spends
           </div>
           {statsLoading ? (
-            <div className="h-10 w-32 bg-gray-100 rounded animate-pulse mt-2" />
+            <div className="h-8 sm:h-10 w-32 bg-gray-100 rounded animate-pulse mt-2" />
           ) : (
             <>
-              <div className="text-4xl font-bold text-gray-900 tabular-nums">
+              <div className="text-3xl sm:text-4xl font-bold text-gray-900 tabular-nums">
                 {formatCurrency(stats?.currentMonthTotal || 0)}
               </div>
-              <p className="text-sm text-gray-500 mt-1">Across {stats?.categoryTotals?.length || 0} categories this month</p>
+              <p className="text-xs sm:text-sm text-gray-500 mt-1">Across {stats?.categoryTotals?.length || 0} categories this month</p>
             </>
           )}
         </div>
@@ -146,39 +146,39 @@ export default function DashboardPage() {
       </div>
 
       {/* Detail Rows */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         
         {/* Top Categories */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
-          <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-            <h3 className="text-lg font-semibold flex items-center gap-2">
+          <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
               <span className="text-indigo-600">{SVGIcons.Activity}</span> Top Categories
             </h3>
           </div>
 
-          <div className="p-6 flex-1">
+          <div className="p-4 sm:p-6 flex-1">
             {statsLoading ? (
               <div className="space-y-4">
                 {[1, 2, 3].map(i => <div key={i} className="h-8 bg-gray-100 rounded animate-pulse" />)}
               </div>
             ) : !stats?.categoryTotals?.length ? (
-              <div className="text-center py-8 text-gray-400 flex flex-col items-center">
+              <div className="text-center py-6 sm:py-8 text-gray-400 flex flex-col items-center">
                 <span className="mb-3 opacity-50">{SVGIcons.TrendingUp}</span>
-                <p>No personal expenses logged.</p>
+                <p className="text-sm sm:text-base">No personal expenses logged.</p>
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {stats.categoryTotals.slice(0, 4).map(cat => {
                   const max = stats.categoryTotals[0].totalPaise;
                   const pct = Math.round((cat.totalPaise / max) * 100);
                   return (
                     <div key={cat.category}>
-                      <div className="flex justify-between items-center mb-2">
-                        <div className="flex items-center gap-2.5">
-                          <span className="text-gray-400">{getCategoryIcon(cat.category)}</span>
-                          <span className="font-medium text-gray-700 capitalize">{cat.category.toLowerCase().replace('_', ' ')}</span>
+                      <div className="flex justify-between items-center mb-1.5 sm:mb-2">
+                        <div className="flex items-center gap-2 sm:gap-2.5">
+                          <span className="text-gray-400 scale-90 sm:scale-100">{getCategoryIcon(cat.category)}</span>
+                          <span className="text-sm sm:text-base font-medium text-gray-700 capitalize">{cat.category.toLowerCase().replace('_', ' ')}</span>
                         </div>
-                        <span className="font-semibold tabular-nums text-gray-900">
+                        <span className="text-sm sm:text-base font-semibold tabular-nums text-gray-900">
                           {formatCurrency(cat.totalPaise)}
                         </span>
                       </div>
@@ -195,8 +195,8 @@ export default function DashboardPage() {
 
         {/* Pending Settlements */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
-          <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-            <h3 className="text-lg font-semibold flex items-center gap-2">
+          <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
               ⚠️ Action Required
             </h3>
             <Link href="/friends" className="text-sm font-medium text-indigo-600 hover:text-indigo-700">
@@ -206,24 +206,24 @@ export default function DashboardPage() {
 
           <div className="flex-1">
             {pendingSettlements.length === 0 ? (
-              <div className="text-center py-12 text-gray-400 flex flex-col items-center">
+              <div className="text-center py-10 sm:py-12 text-gray-400 flex flex-col items-center">
                 <span className="text-3xl mb-3">🎉</span>
-                <p className="font-medium text-gray-600">You're all settled up!</p>
+                <p className="text-sm sm:text-base font-medium text-gray-600">You're all settled up!</p>
               </div>
             ) : (
               <div className="divide-y divide-gray-100">
                 {pendingSettlements.slice(0, 5).map((plan, i) => (
-                  <div key={i} className="flex justify-between items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+                  <div key={i} className="flex justify-between items-center px-4 sm:px-6 py-3 sm:py-4 hover:bg-gray-50 transition-colors">
                     <div className="flex items-center gap-3">
                       <Avatar name={plan.toUser?.name} size="sm" />
                       <div>
                         <div className="text-sm font-medium text-gray-900">
                           Owe <span className="font-semibold">{plan.toUser?.name}</span>
                         </div>
-                        <div className="text-xs text-gray-500">{plan.groupName}</div>
+                        <div className="text-xs text-gray-500 truncate max-w-[120px] sm:max-w-[180px]">{plan.groupName}</div>
                       </div>
                     </div>
-                    <div className="font-semibold text-red-600 tabular-nums">
+                    <div className="text-sm sm:text-base font-semibold text-red-600 tabular-nums">
                       {formatCurrency(plan.amountPaise)}
                     </div>
                   </div>
