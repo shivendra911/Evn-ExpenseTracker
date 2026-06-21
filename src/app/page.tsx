@@ -177,6 +177,55 @@ export default function LandingPage() {
         </section>
 
 
+        {/* 5. Trust / credibility strip - Redesigned */}
+        <section className="py-16 md:py-24 px-5 max-w-4xl mx-auto w-full">
+          <div className="bg-[#0F172A] rounded-xl border border-slate-800 shadow-2xl overflow-hidden max-w-3xl mx-auto">
+            {/* Window Chrome */}
+            <div className="flex items-center gap-2 px-4 py-3 bg-[#1E293B] border-b border-slate-800">
+              <div className="w-3 h-3 rounded-full bg-[#FF5F56]"></div>
+              <div className="w-3 h-3 rounded-full bg-[#FFBD2E]"></div>
+              <div className="w-3 h-3 rounded-full bg-[#27C93F]"></div>
+              <div className="text-slate-400 text-xs font-mono ml-2">architecture.ts</div>
+            </div>
+            
+            {/* Code Content */}
+            <div className="p-5 md:p-8 font-mono text-sm md:text-base leading-relaxed overflow-x-auto">
+              <div className="flex">
+                <span className="text-slate-600 w-8 select-none shrink-0">1</span>
+                <span className="text-slate-400"><span className="text-[#A78BFA]">import</span> {'{'} Security, Precision {'}'} <span className="text-[#A78BFA]">from</span> <span className="text-[#34D399]">'@evn/core'</span>;</span>
+              </div>
+              <div className="flex">
+                <span className="text-slate-600 w-8 select-none shrink-0">2</span>
+                <span className="text-slate-400"></span>
+              </div>
+              <div className="flex">
+                <span className="text-slate-600 w-8 select-none shrink-0">3</span>
+                <span className="text-slate-500 italic">// Open about how it works</span>
+              </div>
+              <div className="flex">
+                <span className="text-slate-600 w-8 select-none shrink-0">4</span>
+                <span className="text-slate-300"><span className="text-[#F472B6]">export const</span> <span className="text-[#60A5FA]">features</span> = {'{'}</span>
+              </div>
+              <div className="flex">
+                <span className="text-slate-600 w-8 select-none shrink-0">5</span>
+                <span className="text-slate-300 ml-4"><span className="text-[#FCD34D]">math</span>: <span className="text-[#34D399]">'Integer Paise Math'</span>, <span className="text-slate-500 italic">// No floating point rounding bugs</span></span>
+              </div>
+              <div className="flex">
+                <span className="text-slate-600 w-8 select-none shrink-0">6</span>
+                <span className="text-slate-300 ml-4"><span className="text-[#FCD34D]">auth</span>: <span className="text-[#34D399]">'JWT with rotating refresh tokens'</span>,</span>
+              </div>
+              <div className="flex">
+                <span className="text-slate-600 w-8 select-none shrink-0">7</span>
+                <span className="text-slate-300 ml-4"><span className="text-[#FCD34D]">security</span>: <span className="text-[#34D399]">'Bcrypt salted password hashing'</span></span>
+              </div>
+              <div className="flex">
+                <span className="text-slate-600 w-8 select-none shrink-0">8</span>
+                <span className="text-slate-300">{'}'};</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* 6. Friends & Groups */}
         <section className="py-12 md:py-24 px-5 max-w-4xl mx-auto w-full border-t border-[var(--border-default)]">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Connections, clarified.</h2>
