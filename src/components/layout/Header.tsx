@@ -81,15 +81,6 @@ export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
 
         {/* User profile / Logout */}
         <div className="flex items-center gap-4 border-l border-[var(--border-default)] pl-4">
-          {isAdmin && (
-            <div
-              onClick={() => router.push('/admin')}
-              className="md:hidden flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-100 cursor-pointer font-bold text-xs"
-              title="Admin Panel"
-            >
-              A
-            </div>
-          )}
           <div onClick={() => router.push('/profile')} className="cursor-pointer hover:opacity-80 transition-opacity">
             <Avatar name={user?.name || 'User'} size="sm" />
           </div>

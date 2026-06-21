@@ -55,10 +55,13 @@ export const POST = withAuth(async (request: AuthenticatedRequest) => {
     // Check if handle matches (handles typically start with @, but user might omit it)
     const handleStr = identifier.startsWith('@') ? identifier.substring(1) : identifier;
     
+    // Check if uniqueId has a '#' prefix
+    const uniqueIdStr = identifier.startsWith('#') ? identifier.substring(1).toUpperCase() : identifier.toUpperCase();
+    
     targetUser = await prisma.user.findFirst({
       where: {
         OR: [
-          { uniqueId: identifier },
+          { uniqueId: uniqueIdStr },
           { handle: handleStr },
           { email: identifier },
         ]

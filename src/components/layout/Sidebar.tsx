@@ -37,6 +37,11 @@ const Icons = {
       <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
     </svg>
   ),
+  Admin: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+  ),
   Toggle: () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M9 18l6-6-6-6" />
@@ -50,7 +55,7 @@ const NAV_ITEMS = [
   { href: '/friends', label: 'Friends', Icon: Icons.Friends },
   { href: '/houses', label: 'Houses', Icon: Icons.Houses },
   { href: '/activity', label: 'Analytics', Icon: Icons.Analytics },
-  { href: '/profile', label: 'Settings', Icon: Icons.Settings },
+  { href: '/profile', label: 'Profile', Icon: Icons.Settings },
 ];
 
 interface SidebarProps {
@@ -112,6 +117,26 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
             </Link>
           );
         })}
+        
+        {isAdmin && (
+          <Link
+            href="/admin"
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group relative mt-4 border-t border-gray-100 pt-4 ${
+              pathname.startsWith('/admin') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-indigo-600 hover:bg-indigo-50'
+            } ${isCollapsed ? 'justify-center px-0' : ''}`}
+            title={isCollapsed ? 'Admin' : undefined}
+          >
+            <span className="shrink-0">
+              <Icons.Admin />
+            </span>
+            {!isCollapsed && (
+              <span className="flex-1 truncate">Admin Panel</span>
+            )}
+            {pathname.startsWith('/admin') && !isCollapsed && (
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-indigo-600 rounded-r-md" />
+            )}
+          </Link>
+        )}
       </nav>
 
       {/* Action Area */}
