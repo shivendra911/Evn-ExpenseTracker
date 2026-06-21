@@ -35,16 +35,6 @@ export function AppShell({ children }: { children: ReactNode }) {
             {children}
           </div>
         </main>
-        
-        {/* Floating Add Expense Button (Mobile Only) */}
-        <div className="md-hidden fixed bottom-24 right-4 z-50">
-          <a href="/expenses/new" className="flex items-center justify-center w-14 h-14 bg-[var(--accent)] text-white rounded-full shadow-lg hover:bg-[var(--accent-hover)] transition-transform hover:scale-105 active:scale-95">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-          </a>
-        </div>
       </div>
 
       {/* Bottom Nav for Mobile */}

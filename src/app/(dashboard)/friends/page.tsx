@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
-import { apiGet } from '@/api/client';
+import { apiGet, apiPost, apiPatch } from '@/api/client';
 import { useAuthStore } from '@/store/auth';
 import { useToast } from '@/components/ui/Toast';
 import { formatCurrency } from '@/lib/money';
@@ -77,15 +77,7 @@ export default function FriendsPage() {
   });
 
   const addFriendMutation = useMutation({
-    mutationFn: (identifier: string) => fetch('/api/friends/requests', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ identifier })
-    }).then(async (res) => {
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error?.message || 'Failed to send request');
-      return data;
-    }),
+    mutationFn: (identifier: string) => apiPost('/api/friends/requests', { identifier }),
     onSuccess: () => {
       toastSuccess('Friend request sent!');
       setAddFriendInput('');
@@ -95,15 +87,7 @@ export default function FriendsPage() {
   });
 
   const respondMutation = useMutation({
-    mutationFn: ({ id, action }: { id: string; action: 'ACCEPT' | 'DECLINE' }) => fetch(`/api/friends/requests/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action })
-    }).then(async (res) => {
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error?.message || 'Failed to respond');
-      return data;
-    }),
+    mutationFn: ({ id, action }: { id: string; action: 'ACCEPT' | 'DECLINE' }) => apiPatch(`/api/friends/requests/${id}`, { action }),
     onSuccess: (_, variables) => {
       if (variables.action === 'ACCEPT') {
         toastSuccess('Friend request accepted!');
