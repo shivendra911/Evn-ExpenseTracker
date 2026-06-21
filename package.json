@@ -13,12 +13,18 @@
     "@prisma/client": "^5.22.0",
     "@tailwindcss/postcss": "^4.3.1",
     "@tanstack/react-query": "^5.101.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.1",
+    "@types/pdfkit": "^0.17.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "bcryptjs": "^3.0.3",
     "crypto-js": "^4.2.0",
     "csv-stringify": "^6.8.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.9",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^1.21.0",
     "next": "16.2.9",
@@ -35,13 +41,7 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
-    "@types/jsonwebtoken": "^9.0.10",
-    "@types/nodemailer": "^8.0.1",
-    "@types/pdfkit": "^0.17.6",
     "@vitejs/plugin-react": "^6.0.2",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.9",
     "vitest": "^4.1.9"
   }
 }
