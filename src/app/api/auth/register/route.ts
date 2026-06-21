@@ -38,6 +38,9 @@ export async function POST(request: NextRequest) {
     // Generate unique ID
     let uniqueId = crypto.randomBytes(3).toString('hex').toUpperCase();
 
+    // Generate unique handle
+    let handle = body.name.toLowerCase().replace(/[^a-z0-9]/g, '') + Math.floor(Math.random() * 10000);
+
     // Create user
     const user = await prisma.user.create({
       data: {
@@ -45,6 +48,7 @@ export async function POST(request: NextRequest) {
         email: body.email.toLowerCase(),
         passwordHash,
         uniqueId,
+        handle,
       },
     });
 
