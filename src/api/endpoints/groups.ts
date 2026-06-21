@@ -1,6 +1,6 @@
 'use client';
 
-import { apiGet, apiPost, apiPut } from '../client';
+import { apiGet, apiPost, apiPut, apiDelete, apiPatch } from '../client';
 import type {
   GroupResponse,
   GroupDetailResponse,
