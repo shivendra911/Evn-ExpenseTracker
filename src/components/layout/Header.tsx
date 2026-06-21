@@ -24,7 +24,7 @@ const QuickActions = [
   { label: 'Friend', href: '/friends', icon: '👤' }, // Could link to a specific add friend modal/page
 ];
 
-export function Header() {
+export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, clearAuth } = useAuthStore();
@@ -42,6 +42,18 @@ export function Header() {
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between px-6 py-4 bg-[var(--bg-card)] border-b border-[var(--border-default)]">
       <div className="flex items-center gap-4">
+        {/* Mobile menu toggle */}
+        <button 
+          onClick={onMenuToggle}
+          className="md:hidden flex items-center justify-center p-1.5 -ml-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
         {/* Mobile brand logo (hidden on desktop) */}
         <div className="md:hidden block">
           <Logo className="scale-90 origin-left" />

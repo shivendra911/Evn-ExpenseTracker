@@ -36,7 +36,7 @@ const MOBILE_NAV_ITEMS = [
   { href: '/expenses', label: 'Expenses', Icon: Icons.Expenses },
   { href: '/expenses/new', label: 'Add', Icon: Icons.Add, isPrimary: true },
   { href: '/friends', label: 'Friends', Icon: Icons.Friends },
-  { href: '/profile', label: 'Profile', Icon: Icons.Profile },
+  { href: '/groups', label: 'Groups', Icon: Icons.Friends }, // Reusing the Friends/Groups icon
 ];
 
 export function BottomNav() {
