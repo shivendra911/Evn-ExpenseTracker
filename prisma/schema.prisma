@@ -330,6 +330,15 @@ model RateLimit {
   createdAt DateTime @default(now())
 }
 
+// ─── SYSTEM SETTINGS ────────────────────────────────────
+
+model SystemSetting {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  key       String   @unique // e.g. "register_ip_limit", "login_email_limit"
+  value     Json     // e.g. { "maxAttempts": 5, "windowMs": 3600000 }
+  updatedAt DateTime @updatedAt
+}
+
 // ─── HOUSES MODULE (Flatmate Extension) ─────────────────
 
 model HouseFixedCost {

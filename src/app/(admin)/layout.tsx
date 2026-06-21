@@ -3,7 +3,7 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Users, FolderTree, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, FolderTree, LogOut, ShieldAlert } from 'lucide-react';
 import { useAuthStore } from '@/store/auth';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
@@ -20,6 +20,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
     { name: 'Users', href: '/admin/users', icon: Users },
     { name: 'Groups', href: '/admin/groups', icon: FolderTree },
+    { name: 'Security', href: '/admin/security', icon: ShieldAlert },
   ];
 
   return (
