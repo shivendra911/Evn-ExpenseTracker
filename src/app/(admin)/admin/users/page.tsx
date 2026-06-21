@@ -142,9 +142,9 @@ export default function AdminUsersPage() {
                             <XCircle size={16} />
                             <span>Unverified</span>
                           </div>
-                          {user.verificationTokens && user.verificationTokens.length > 0 && (
+                          {user.emailVerificationTokens && user.emailVerificationTokens.length > 0 && (
                             <div className="text-xs font-mono text-gray-400">
-                              OTP: <span className="text-white font-bold">{user.verificationTokens[0].token}</span>
+                              OTP: <span className="text-white font-bold">{user.emailVerificationTokens[0].token}</span>
                             </div>
                           )}
                         </div>

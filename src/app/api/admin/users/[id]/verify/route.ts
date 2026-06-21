@@ -3,9 +3,9 @@ import { prisma } from '@/lib/prisma';
 import { withAdmin } from '@/middleware/withAdmin';
 import { successResponse, errorResponse } from '@/middleware/errors';
 
-export const POST = withAdmin(async (request, { params }: { params: { id: string } }) => {
+export const POST = withAdmin(async (request, context: { params: Promise<{ id: string }> }) => {
   try {
-    const userId = params.id;
+    const { id: userId } = await context.params;
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
