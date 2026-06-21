@@ -3,250 +3,247 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { Logo } from '@/components/ui/Logo';
 
 export const metadata = {
-  title: 'Evn | Split what\'s shared. Skip what\'s not.',
-  description: 'A serious expense tracker for flatmates and friends.',
+  title: "Evn | Split what's shared. Skip what's not.",
+  description: 'A precision expense ledger for flatmates and friends.',
 };
+
+function LedgerLine({ n }: { n: string }) {
+  return (
+    <div className="relative flex justify-end pr-3 border-r border-[var(--border-default)]" aria-hidden="true">
+      <span className="font-mono text-[0.6rem] md:text-[0.7rem] text-[var(--text-muted)] tracking-[0.05em] pt-1">{n}</span>
+    </div>
+  );
+}
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)]">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-300">
       {/* Navigation - Sticky */}
-      <nav className="sticky top-0 z-50 w-full border-b border-[var(--border-default)] bg-[var(--bg-primary)]/90 backdrop-blur-md">
-        <div className="flex items-center justify-between px-5 py-4 max-w-6xl mx-auto w-full">
+      <nav className="sticky top-0 z-50 w-full border-b border-[var(--border-default)] bg-[var(--bg-primary)]/90 backdrop-blur-md transition-colors duration-300">
+        <div className="flex items-center justify-between px-5 py-4 max-w-[880px] mx-auto w-full">
           <Logo />
 
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <Link href="/login" className="text-[var(--text-inverse)] font-semibold bg-[var(--accent)] hover:bg-[var(--accent-hover)] transition-colors no-underline px-6 py-2.5 rounded-full text-sm md:text-base">
+            <Link href="/login" className="font-sans font-semibold text-[var(--text-primary)] border border-[var(--border-default)] hover:border-[var(--text-primary)] hover:bg-[var(--text-primary)] hover:text-[var(--bg-primary)] transition-all no-underline px-4 py-2 rounded-sm text-sm shadow-sm">
               Log In
             </Link>
           </div>
         </div>
       </nav>
 
-      <main className="flex-1 flex flex-col pb-24">
+      <main className="flex-1 flex flex-col max-w-[880px] mx-auto w-full">
         
-        {/* 1. Hero */}
-        <section className="py-12 md:py-24 px-5 max-w-4xl mx-auto w-full">
-          <h1 className="text-4xl sm:text-5xl md:text-[4rem] font-extrabold leading-[1.1] tracking-tight mb-6 text-[var(--text-primary)]">
-            Split what's shared.<br />
-            Skip what's not.
-          </h1>
-          
-          <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl leading-relaxed mb-10">
-            If only three of you ate the rice, only three of you should pay for the rice. 
-            A precision expense tracker built for real households.
-          </p>
-
-          <Link href="/register" className="btn btn-primary w-full sm:w-auto px-8 py-3.5 text-lg rounded-md font-semibold inline-flex text-center justify-center shadow-sm hover:shadow-md">
-            Start free
-          </Link>
-
-          {/* Mini-demo Split-preview Screen Mockup */}
-          <div className="mt-16 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-5 md:p-8">
-            <div className="flex justify-between mb-6 border-b border-[var(--border-default)] pb-4">
-              <div>
-                <div className="text-lg md:text-xl font-semibold">Groceries (Rice & Veggies)</div>
-                <div className="text-[var(--text-secondary)] text-sm mt-1">Paid by you • ₹1,200.00</div>
-              </div>
-              <div className="text-xl md:text-2xl font-bold text-[var(--accent)] shrink-0 pl-4">₹1,200</div>
-            </div>
+        {/* 001 - Hero */}
+        <section className="grid grid-cols-[24px_1fr] sm:grid-cols-[36px_1fr] gap-3 sm:gap-4 py-12 md:py-16 px-4 sm:px-5 border-b border-[var(--border-default)]/50 relative">
+          <LedgerLine n="001" />
+          <div className="min-w-0">
+            <p className="font-mono text-[0.7rem] tracking-[0.12em] uppercase text-[var(--accent)] mb-3">Statement of shared expenses</p>
+            <h1 className="font-serif font-semibold text-4xl sm:text-5xl md:text-[3.75rem] leading-[1.08] tracking-[-0.01em] mb-5 text-[var(--text-primary)]">
+              Split what's shared.<br />
+              Skip what's not.
+            </h1>
             
-            <div className="flex flex-col gap-4">
-              {/* Row 1 */}
-              <div className="flex justify-between items-center group">
-                <div className="flex items-center gap-3 md:gap-4 min-w-0 pr-4">
-                  <div className="w-8 h-8 md:w-6 md:h-6 rounded bg-[var(--accent)] flex items-center justify-center shrink-0">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  </div>
-                  <span className="font-medium truncate">You</span>
+            <p className="text-base sm:text-lg text-[var(--text-secondary)] max-w-[36em] leading-[1.55] mb-7">
+              If only three of you ate the rice, only three of you pay for the rice. 
+              A precision ledger for real households — not a generic splitter.
+            </p>
+
+            <Link href="/register" className="inline-flex items-center justify-center bg-[var(--accent)] text-[var(--bg-primary)] font-sans font-semibold text-base px-7 py-3 rounded-sm transition-colors hover:bg-[var(--accent-hover)] focus-visible:outline-2 focus-visible:outline-[var(--accent)] focus-visible:outline-offset-2 w-full sm:w-auto">
+              Start free, no card needed
+            </Link>
+
+            {/* Receipt-style demo */}
+            <div className="mt-10 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-md p-5 sm:p-7 shadow-sm">
+              <div className="flex justify-between items-start gap-3 pb-4 mb-4 border-b border-[var(--border-default)]/50">
+                <div>
+                  <div className="font-serif font-semibold text-lg text-[var(--text-primary)]">Groceries — Rice & Veggies</div>
+                  <div className="text-[0.8rem] text-[var(--text-muted)] mt-1">Paid by you · 19 Jun</div>
                 </div>
-                <div className="font-mono text-sm md:text-base shrink-0">₹400.00</div>
+                <div className="font-serif font-semibold text-2xl text-[var(--text-primary)] whitespace-nowrap">₹1,200<span className="text-[0.85em] text-[var(--text-muted)]">.00</span></div>
               </div>
-              {/* Row 2 */}
-              <div className="flex justify-between items-center group">
-                <div className="flex items-center gap-3 md:gap-4 min-w-0 pr-4">
-                  <div className="w-8 h-8 md:w-6 md:h-6 rounded bg-[var(--accent)] flex items-center justify-center shrink-0">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  </div>
-                  <span className="font-medium truncate">Ravi</span>
-                </div>
-                <div className="font-mono text-sm md:text-base shrink-0">₹400.00</div>
-              </div>
-              {/* Row 3 - Excluded */}
-              <div className="flex justify-between items-center opacity-50 group">
-                <div className="flex items-center gap-3 md:gap-4 min-w-0 pr-4">
-                  <div className="w-8 h-8 md:w-6 md:h-6 rounded border border-[var(--text-muted)] flex items-center justify-center shrink-0"></div>
-                  <span className="line-through font-medium truncate">Priya <span className="hidden sm:inline">(Out of town)</span></span>
-                </div>
-                <div className="font-mono text-sm md:text-base shrink-0">₹0.00</div>
-              </div>
-              {/* Row 4 */}
-              <div className="flex justify-between items-center group">
-                <div className="flex items-center gap-3 md:gap-4 min-w-0 pr-4">
-                  <div className="w-8 h-8 md:w-6 md:h-6 rounded bg-[var(--accent)] flex items-center justify-center shrink-0">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-inverse)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  </div>
-                  <span className="font-medium truncate">Karan</span>
-                </div>
-                <div className="font-mono text-sm md:text-base shrink-0">₹400.00</div>
+              
+              <ul className="flex flex-col gap-3 m-0 p-0 list-none">
+                <li className="flex items-baseline gap-2">
+                  <span className="text-[0.95rem] text-[var(--text-primary)] whitespace-nowrap shrink-0">You</span>
+                  <span className="flex-1 border-b border-dotted border-[var(--border-default)] self-end mb-1 min-w-[12px]" />
+                  <span className="font-mono text-[0.9rem] text-[var(--text-primary)] whitespace-nowrap shrink-0">₹400.00</span>
+                </li>
+                <li className="flex items-baseline gap-2">
+                  <span className="text-[0.95rem] text-[var(--text-primary)] whitespace-nowrap shrink-0">Ravi</span>
+                  <span className="flex-1 border-b border-dotted border-[var(--border-default)] self-end mb-1 min-w-[12px]" />
+                  <span className="font-mono text-[0.9rem] text-[var(--text-primary)] whitespace-nowrap shrink-0">₹400.00</span>
+                </li>
+                <li className="flex items-baseline gap-2 text-[var(--text-muted)] opacity-70">
+                  <span className="text-[0.95rem] whitespace-nowrap shrink-0 line-through">Priya <em className="italic text-[0.85em] not-italic">— out of town</em></span>
+                  <span className="flex-1 border-b border-dotted border-[var(--border-default)]/50 self-end mb-1 min-w-[12px]" />
+                  <span className="font-mono text-[0.9rem] whitespace-nowrap shrink-0 line-through">₹0.00</span>
+                </li>
+                <li className="flex items-baseline gap-2">
+                  <span className="text-[0.95rem] text-[var(--text-primary)] whitespace-nowrap shrink-0">Karan</span>
+                  <span className="flex-1 border-b border-dotted border-[var(--border-default)] self-end mb-1 min-w-[12px]" />
+                  <span className="font-mono text-[0.9rem] text-[var(--text-primary)] whitespace-nowrap shrink-0">₹400.00</span>
+                </li>
+              </ul>
+              <div className="mt-4 pt-3 border-t border-[var(--border-default)]/50 text-[0.8rem] text-[var(--text-muted)]">
+                Split three ways. Priya wasn't home — she owes nothing.
               </div>
             </div>
           </div>
         </section>
 
-        {/* 2. The Problem */}
-        <section className="py-12 md:py-24 px-5 max-w-4xl mx-auto w-full">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Most tools assume everyone owes for everything.</h2>
-          <p className="text-lg md:text-xl text-[var(--text-secondary)] leading-relaxed max-w-2xl">
-            Real households don't work that way. One person is vegetarian, one's never home for dinner, and one paid the Wi-Fi bill alone. Splitting shouldn't require a spreadsheet.
-          </p>
+        {/* 002 - The Problem */}
+        <section className="grid grid-cols-[24px_1fr] sm:grid-cols-[36px_1fr] gap-3 sm:gap-4 py-12 px-4 sm:px-5 border-b border-[var(--border-default)]/50 relative">
+          <LedgerLine n="002" />
+          <div className="min-w-0">
+            <h2 className="font-serif font-semibold text-2xl sm:text-[2.1rem] leading-[1.2] mb-4 text-[var(--text-primary)]">Most tools assume everyone owes for everything.</h2>
+            <p className="text-[1.05rem] text-[var(--text-secondary)] leading-[1.65] max-w-[36em]">
+              Real households don't work that way. One person is vegetarian, one's never home for dinner, one paid the Wi-Fi bill alone. Evn asks two separate questions for every expense — who paid, and who actually benefited — instead of assuming they're the same five people every time.
+            </p>
+          </div>
         </section>
 
-        {/* 3. How it actually works */}
-        <section className="py-12 md:py-24 px-5 max-w-4xl mx-auto w-full border-t border-[var(--border-default)]">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12">How it works</h2>
-          
-          <div className="grid gap-12 md:gap-16">
-            {/* Step 1 */}
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div>
-                <div className="text-[var(--accent)] font-bold mb-2">01</div>
-                <h3 className="text-xl font-semibold mb-3">Add an expense, who paid.</h3>
-                <p className="text-[var(--text-secondary)] leading-relaxed">Record the exact amount and the payer immediately. No complex categorization required.</p>
+        {/* 003 - How it works */}
+        <section className="grid grid-cols-[24px_1fr] sm:grid-cols-[36px_1fr] gap-3 sm:gap-4 py-12 px-4 sm:px-5 border-b border-[var(--border-default)]/50 relative">
+          <LedgerLine n="003" />
+          <div className="min-w-0">
+            <h2 className="font-serif font-semibold text-2xl sm:text-[2.1rem] leading-[1.2] mb-8 text-[var(--text-primary)]">How it works</h2>
+            
+            <div className="flex flex-col gap-9">
+              {/* Step 1 */}
+              <div className="grid grid-cols-[28px_1fr] md:grid-cols-[28px_1fr_1fr] gap-3 md:gap-4 md:items-center">
+                <div className="font-serif italic font-semibold text-[var(--accent)] text-[1.1rem] col-start-1 row-start-1">i.</div>
+                <div className="col-start-2 row-start-1 md:col-start-2">
+                  <h3 className="text-[1.05rem] font-semibold mb-1.5 text-[var(--text-primary)]">Log the expense, name the payer.</h3>
+                  <p className="text-[0.95rem] text-[var(--text-secondary)] leading-[1.55] m-0">Enter the amount and who actually paid. One person, or several, in any split.</p>
+                </div>
+                <div className="col-span-full md:col-start-3 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-md p-4 mt-2 md:mt-0 shadow-sm">
+                  <div className="text-[0.75rem] text-[var(--text-muted)] mb-1">Amount paid</div>
+                  <div className="font-serif text-[1.7rem] font-semibold text-[var(--text-primary)]">₹850.00</div>
+                </div>
               </div>
-              <div className="bg-[var(--bg-card)] p-5 md:p-6 rounded-xl border border-[var(--border-default)]">
-                <div className="text-sm text-[var(--text-secondary)] mb-2">Amount Paid</div>
-                <div className="text-3xl font-bold">₹850.00</div>
-              </div>
-            </div>
 
-            {/* Step 2 */}
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div>
-                <div className="text-[var(--accent)] font-bold mb-2">02</div>
-                <h3 className="text-xl font-semibold mb-3">Choose who's actually in on it.</h3>
-                <p className="text-[var(--text-secondary)] leading-relaxed">Not the whole group by default. Exclude people with a single tap, and the math recalibrates instantly.</p>
+              {/* Step 2 */}
+              <div className="grid grid-cols-[28px_1fr] md:grid-cols-[28px_1fr_1fr] gap-3 md:gap-4 md:items-center">
+                <div className="font-serif italic font-semibold text-[var(--accent)] text-[1.1rem] col-start-1 row-start-1">ii.</div>
+                <div className="col-start-2 row-start-1 md:col-start-2">
+                  <h3 className="text-[1.05rem] font-semibold mb-1.5 text-[var(--text-primary)]">Choose who's actually in on it.</h3>
+                  <p className="text-[0.95rem] text-[var(--text-secondary)] leading-[1.55] m-0">Not the whole group by default. Exclude anyone with one tap — the math updates instantly.</p>
+                </div>
+                <div className="col-span-full md:col-start-3 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-md p-4 mt-2 md:mt-0 shadow-sm flex flex-wrap gap-2">
+                  <div className="inline-flex text-[0.85rem] px-3.5 py-1.5 rounded-full font-medium bg-[var(--accent)] text-[var(--bg-primary)]">You</div>
+                  <div className="inline-flex text-[0.85rem] px-3.5 py-1.5 rounded-full font-medium bg-[var(--accent)] text-[var(--bg-primary)]">Ravi</div>
+                  <div className="inline-flex text-[0.85rem] px-3.5 py-1.5 rounded-full font-medium border border-[var(--border-default)] text-[var(--text-muted)] line-through">Priya</div>
+                </div>
               </div>
-              <div className="bg-[var(--bg-card)] p-5 md:p-6 rounded-xl border border-[var(--border-default)] flex flex-wrap gap-2">
-                <div className="px-3 py-1.5 bg-[var(--accent)] text-[var(--text-inverse)] rounded-full text-sm font-medium">You</div>
-                <div className="px-3 py-1.5 bg-[var(--accent)] text-[var(--text-inverse)] rounded-full text-sm font-medium">Ravi</div>
-                <div className="px-3 py-1.5 border border-[var(--border-default)] text-[var(--text-muted)] rounded-full text-sm line-through">Priya</div>
-              </div>
-            </div>
 
-            {/* Step 3 */}
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div>
-                <div className="text-[var(--accent)] font-bold mb-2">03</div>
-                <h3 className="text-xl font-semibold mb-3">See the simplified settlement.</h3>
-                <p className="text-[var(--text-secondary)] leading-relaxed">Instead of 12 crisscrossing IOUs, the algorithm calculates the absolute minimum number of transfers to get everyone whole.</p>
-              </div>
-              <div className="bg-[var(--bg-card)] p-5 md:p-6 rounded-xl border border-[var(--border-default)]">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">Priya owes Ravi</span>
-                  <span className="font-bold">₹425.00</span>
+              {/* Step 3 */}
+              <div className="grid grid-cols-[28px_1fr] md:grid-cols-[28px_1fr_1fr] gap-3 md:gap-4 md:items-center">
+                <div className="font-serif italic font-semibold text-[var(--accent)] text-[1.1rem] col-start-1 row-start-1">iii.</div>
+                <div className="col-start-2 row-start-1 md:col-start-2">
+                  <h3 className="text-[1.05rem] font-semibold mb-1.5 text-[var(--text-primary)]">See the simplified settlement.</h3>
+                  <p className="text-[0.95rem] text-[var(--text-secondary)] leading-[1.55] m-0">Instead of a dozen crossing IOUs, the minimum number of transfers to make everyone whole.</p>
+                </div>
+                <div className="col-span-full md:col-start-3 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-md p-4 mt-2 md:mt-0 shadow-sm flex justify-between items-baseline text-[0.95rem]">
+                  <span className="text-[var(--text-primary)]">Priya owes Ravi</span>
+                  <span className="font-mono text-[#8B2E2E] dark:text-[#E57373] font-semibold">₹425.00</span>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 4. The House module */}
-        <section className="py-12 md:py-24 px-5 bg-[var(--bg-card)] border-b border-[var(--border-default)]">
-          <div className="max-w-4xl mx-auto w-full">
-            <div className="inline-block border border-[var(--accent)] text-[var(--accent)] px-3 py-1 rounded text-sm font-bold mb-6">
-              Built for flatmates
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">The House Module</h2>
-            <p className="text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl mb-10">
-              Living together means managing two distinctly different types of expenses: fixed recurring costs (like Rent and Electricity) and volatile daily entries (like groceries and takeaways). Evn separates these intentionally. 
+        {/* 004 - House Module */}
+        <section className="grid grid-cols-[24px_1fr] sm:grid-cols-[36px_1fr] gap-3 sm:gap-4 py-12 px-4 sm:px-5 border-b border-[var(--border-default)]/50 relative bg-[var(--accent)]/5">
+          <LedgerLine n="004" />
+          <div className="min-w-0">
+            <p className="inline-block font-mono text-[0.7rem] tracking-[0.08em] uppercase text-[var(--accent)] border border-[var(--accent)] rounded-[3px] px-2.5 py-1 mb-4">Built for flatmates</p>
+            <h2 className="font-serif font-semibold text-2xl sm:text-[2.1rem] leading-[1.2] mb-4 text-[var(--text-primary)]">The house ledger.</h2>
+            <p className="text-[1.05rem] text-[var(--text-secondary)] leading-[1.65] max-w-[36em] mb-6">
+              Living together means two different kinds of expense: fixed costs that repeat every month, and the daily back-and-forth of groceries and takeaway. Evn keeps them on separate pages, the way you'd actually want to read them back.
             </p>
             
-            <div className="grid sm:grid-cols-2 gap-6">
-              <div className="p-6 border border-[var(--border-default)] rounded-xl bg-[var(--bg-primary)]">
-                <h4 className="font-semibold text-lg mb-2">Fixed Costs</h4>
-                <p className="text-[var(--text-secondary)] leading-relaxed text-sm">Rent and utilities that split predictably. Add them once, clear them at the end of the month.</p>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-md p-5 shadow-sm">
+                <h4 className="text-[1rem] font-semibold mb-2 text-[var(--text-primary)]">Fixed costs</h4>
+                <p className="text-[0.9rem] text-[var(--text-secondary)] leading-[1.55] m-0">Rent, electricity, Wi-Fi — added once, split the same way every month, closed out at month's end.</p>
               </div>
-              <div className="p-6 border border-[var(--border-default)] rounded-xl bg-[var(--bg-primary)]">
-                <h4 className="font-semibold text-lg mb-2">Daily Flow</h4>
-                <p className="text-[var(--text-secondary)] leading-relaxed text-sm">Fast entry for one-off shared meals and supplies, with per-person exclusion toggles.</p>
+              <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-md p-5 shadow-sm">
+                <h4 className="text-[1rem] font-semibold mb-2 text-[var(--text-primary)]">Daily flow</h4>
+                <p className="text-[0.9rem] text-[var(--text-secondary)] leading-[1.55] m-0">Quick entry for groceries, food, and one-off buys, with per-person exclusion built in.</p>
               </div>
             </div>
           </div>
         </section>
 
-
-        {/* 5. Trust / credibility strip - Redesigned */}
-        <section className="py-16 md:py-24 px-5 max-w-4xl mx-auto w-full">
-          <div className="bg-[#0F172A] rounded-xl border border-slate-800 shadow-2xl overflow-hidden max-w-3xl mx-auto">
-            {/* Window Chrome */}
-            <div className="flex items-center gap-2 px-4 py-3 bg-[#1E293B] border-b border-slate-800">
-              <div className="w-3 h-3 rounded-full bg-[#FF5F56]"></div>
-              <div className="w-3 h-3 rounded-full bg-[#FFBD2E]"></div>
-              <div className="w-3 h-3 rounded-full bg-[#27C93F]"></div>
-              <div className="text-slate-400 text-xs font-mono ml-2">architecture.ts</div>
-            </div>
+        {/* 005 - Trust List */}
+        <section className="grid grid-cols-[24px_1fr] sm:grid-cols-[36px_1fr] gap-3 sm:gap-4 py-12 px-4 sm:px-5 border-b border-[var(--border-default)]/50 relative">
+          <LedgerLine n="005" />
+          <div className="min-w-0">
+            <h2 className="font-serif font-semibold text-2xl sm:text-[2.1rem] leading-[1.2] mb-6 text-[var(--text-primary)]">Open about how it works.</h2>
             
-            {/* Code Content */}
-            <div className="p-5 md:p-8 font-mono text-xs md:text-base leading-relaxed overflow-x-auto">
-              <div className="flex"><span className="text-slate-600 w-8 select-none shrink-0">1</span><span className="text-slate-500 italic">// Open about how it works</span></div>
-              <div className="flex"><span className="text-slate-600 w-8 select-none shrink-0">2</span><span className="text-slate-300"><span className="text-[#F472B6]">export const</span> <span className="text-[#60A5FA]">features</span> = {'{'}</span></div>
-              <div className="flex"><span className="text-slate-600 w-8 select-none shrink-0">3</span><span className="text-slate-300 ml-4"><span className="text-[#FCD34D]">math</span>: <span className="text-[#34D399]">'Integer paise, no rounding bugs'</span>,</span></div>
-              <div className="flex"><span className="text-slate-600 w-8 select-none shrink-0">4</span><span className="text-slate-300 ml-4"><span className="text-[#FCD34D]">auth</span>: <span className="text-[#34D399]">'JWT, rotating refresh tokens'</span>,</span></div>
-              <div className="flex"><span className="text-slate-600 w-8 select-none shrink-0">5</span><span className="text-slate-300 ml-4"><span className="text-[#FCD34D]">security</span>: <span className="text-[#34D399]">'Bcrypt salted hashing'</span></span></div>
-              <div className="flex"><span className="text-slate-600 w-8 select-none shrink-0">6</span><span className="text-slate-300">{'}'};</span></div>
-            </div>
+            <dl className="flex flex-col gap-4 m-0">
+              <div className="grid sm:grid-cols-[140px_1fr] gap-1 sm:gap-4 sm:items-baseline pb-4 border-b border-[var(--border-default)]/50">
+                <dt className="font-mono text-[0.8rem] text-[var(--accent)] font-semibold">Money math</dt>
+                <dd className="m-0 text-[0.95rem] text-[var(--text-secondary)] leading-[1.5]">Stored as whole paise, never floating point. No rounding drift, ever.</dd>
+              </div>
+              <div className="grid sm:grid-cols-[140px_1fr] gap-1 sm:gap-4 sm:items-baseline pb-4 border-b border-[var(--border-default)]/50">
+                <dt className="font-mono text-[0.8rem] text-[var(--accent)] font-semibold">Sessions</dt>
+                <dd className="m-0 text-[0.95rem] text-[var(--text-secondary)] leading-[1.5]">JWT access tokens with rotating refresh tokens — a stolen token expires fast.</dd>
+              </div>
+              <div className="grid sm:grid-cols-[140px_1fr] gap-1 sm:gap-4 sm:items-baseline pb-0 border-none">
+                <dt className="font-mono text-[0.8rem] text-[var(--accent)] font-semibold">Passwords</dt>
+                <dd className="m-0 text-[0.95rem] text-[var(--text-secondary)] leading-[1.5]">Salted and hashed with bcrypt. Evn never stores what you typed.</dd>
+              </div>
+            </dl>
           </div>
         </section>
 
-        {/* 6. Friends & Groups */}
-        <section className="py-12 md:py-24 px-5 max-w-4xl mx-auto w-full border-t border-[var(--border-default)]">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Connections, clarified.</h2>
-          <p className="text-lg text-[var(--text-secondary)] leading-relaxed max-w-2xl mb-10">
-            This is not a social network. Your friend list isn't public, and connections don't happen automatically. There are exactly two ways to connect with someone:
-          </p>
-          
-          <div className="flex flex-col gap-8">
-            <div className="flex gap-4">
-              <div className="text-[var(--accent)] font-bold text-xl">1.</div>
-              <div>
-                <strong className="block mb-1 text-lg">Share a Group Code</strong>
-                <span className="text-[var(--text-secondary)] leading-relaxed block max-w-2xl">Send a unique invite code to a chat. Anyone who enters it joins the group immediately.</span>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <div className="text-[var(--accent)] font-bold text-xl">2.</div>
-              <div>
-                <strong className="block mb-1 text-lg">Add via ID</strong>
-                <span className="text-[var(--text-secondary)] leading-relaxed block max-w-2xl">Send a direct request using someone's exact User ID. They must explicitly accept it before you are linked.</span>
-              </div>
-            </div>
+        {/* 006 - Connections */}
+        <section className="grid grid-cols-[24px_1fr] sm:grid-cols-[36px_1fr] gap-3 sm:gap-4 py-12 px-4 sm:px-5 border-b border-[var(--border-default)]/50 relative">
+          <LedgerLine n="006" />
+          <div className="min-w-0">
+            <h2 className="font-serif font-semibold text-2xl sm:text-[2.1rem] leading-[1.2] mb-4 text-[var(--text-primary)]">Connections, clarified.</h2>
+            <p className="text-[1.05rem] text-[var(--text-secondary)] leading-[1.65] max-w-[36em] mb-7">
+              This isn't a social network. Nothing about you is public, and nobody is added without action on both sides. There are exactly two ways to connect:
+            </p>
+            
+            <ul className="list-none p-0 m-0 flex flex-col gap-6">
+              <li className="grid grid-cols-[32px_1fr] gap-3.5">
+                <span className="font-serif font-semibold text-[1.1rem] text-[var(--bg-primary)] bg-[var(--accent)] w-7 h-7 rounded-full flex items-center justify-center">1</span>
+                <div>
+                  <h4 className="text-[1rem] font-semibold m-0 mb-1.5 text-[var(--text-primary)]">Share a group code</h4>
+                  <p className="text-[0.9rem] text-[var(--text-secondary)] leading-[1.5] m-0">Every group gets a 6-character code. Anyone who enters it joins immediately.</p>
+                </div>
+              </li>
+              <li className="grid grid-cols-[32px_1fr] gap-3.5">
+                <span className="font-serif font-semibold text-[1.1rem] text-[var(--bg-primary)] bg-[var(--accent)] w-7 h-7 rounded-full flex items-center justify-center">2</span>
+                <div>
+                  <h4 className="text-[1rem] font-semibold m-0 mb-1.5 text-[var(--text-primary)]">Add by ID</h4>
+                  <p className="text-[0.9rem] text-[var(--text-secondary)] leading-[1.5] m-0">Send a request to someone's exact ID. They have to accept before you're linked.</p>
+                </div>
+              </li>
+            </ul>
           </div>
         </section>
 
-        {/* 7. Final CTA */}
-        <section className="py-24 px-5 max-w-4xl mx-auto w-full text-center">
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-10 tracking-tight leading-tight">
-            Split what's shared.<br />
-            Skip what's not.
-          </h2>
-          <Link href="/register" className="btn btn-primary w-full sm:w-auto px-10 py-4 text-lg rounded-md font-semibold inline-flex text-center justify-center shadow-sm hover:shadow-md">
-            Start free
-          </Link>
+        {/* 007 - Final CTA */}
+        <section className="grid grid-cols-[24px_1fr] sm:grid-cols-[36px_1fr] gap-3 sm:gap-4 py-12 px-4 sm:px-5 border-b border-[var(--border-default)]/50 relative">
+          <LedgerLine n="007" />
+          <div className="min-w-0 text-left">
+            <h2 className="font-serif font-semibold text-[1.75rem] sm:text-[2.75rem] leading-[1.15] mb-7 text-[var(--text-primary)]">Split what's shared.<br />Skip what's not.</h2>
+            <Link href="/register" className="inline-flex items-center justify-center bg-[var(--accent)] text-[var(--bg-primary)] font-sans font-semibold text-base px-7 py-3 rounded-sm transition-colors hover:bg-[var(--accent-hover)] focus-visible:outline-2 focus-visible:outline-[var(--accent)] focus-visible:outline-offset-2">
+              Start free
+            </Link>
+          </div>
         </section>
       </main>
 
-      {/* 8. Footer */}
-      <footer className="py-8 px-5 border-t border-[var(--border-default)] text-[var(--text-muted)]">
-        <div className="max-w-4xl mx-auto w-full flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-[var(--text-secondary)]">Evn</span>
-            <span className="text-sm">— Expense tracker</span>
-          </div>
-          <div className="text-sm">
-            Solo build.
-          </div>
+      {/* Footer */}
+      <footer className="w-full">
+        <div className="max-w-[880px] mx-auto w-full flex flex-col sm:flex-row justify-between gap-2 text-[0.85rem] text-[var(--text-secondary)] px-5 py-7">
+          <span><strong className="text-[var(--text-primary)] font-semibold">Evn</strong> — expense ledger</span>
+          <span className="text-[var(--text-muted)]">Solo build, in the open.</span>
         </div>
       </footer>
     </div>
