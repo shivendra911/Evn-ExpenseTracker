@@ -75,130 +75,127 @@ export default function ProfilePage() {
   const displayUser = userProfile || authUser;
 
   return (
-    <div style={{ maxWidth: 540, margin: '0 auto', paddingBottom: 40 }}>
-      <div className="page-header" style={{ marginBottom: 32 }}>
-        <h1 className="page-title">Profile</h1>
+    <div className="max-w-3xl mx-auto pb-10">
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
       </div>
 
-      <div className="card" style={{ padding: '32px 24px', marginBottom: 24, textAlign: 'center' }}>
-        <div style={{
-          width: 80,
-          height: 80,
-          borderRadius: '50%',
-          background: 'var(--accent)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#FFF',
-          fontWeight: 600,
-          fontSize: '2rem',
-          margin: '0 auto 24px'
-        }}>
-          {displayUser.name.charAt(0).toUpperCase()}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-8">
+        <div className="p-6 sm:p-8 flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
+          <div className="w-20 h-20 rounded-full bg-[var(--accent)] flex items-center justify-center text-white font-bold text-3xl shrink-0">
+            {displayUser.name.charAt(0).toUpperCase()}
+          </div>
+          
+          {isEditing ? (
+            <form onSubmit={handleSave} className="flex-1 w-full max-w-sm mx-auto sm:mx-0 text-left">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                  <input 
+                    type="text" 
+                    value={name} 
+                    onChange={(e) => setName(e.target.value)} 
+                    required
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent outline-none transition-all"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">UPI ID (Optional)</label>
+                  <input 
+                    type="text" 
+                    value={upiId} 
+                    onChange={(e) => setUpiId(e.target.value)} 
+                    placeholder="username@bank"
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent outline-none transition-all"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Makes it easier for friends to pay you back.</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Custom Handle (Optional)</label>
+                  <input 
+                    type="text" 
+                    value={handle} 
+                    onChange={(e) => setHandle(e.target.value)} 
+                    placeholder="@username"
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent outline-none transition-all"
+                  />
+                </div>
+
+                <div className="flex gap-3 pt-2 justify-center sm:justify-start">
+                  <button type="submit" className="btn btn-primary" disabled={updateProfileMutation.isPending}>
+                    {updateProfileMutation.isPending ? 'Saving...' : 'Save Changes'}
+                  </button>
+                  <button type="button" className="btn btn-secondary" onClick={() => { 
+                    setIsEditing(false); 
+                    setName(displayUser.name); 
+                    setUpiId(displayUser.upiId || ''); 
+                    setHandle(displayUser.handle || '');
+                  }}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          ) : (
+            <>
+              <div className="flex-1">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">{displayUser.name}</h2>
+                {displayUser.handle && <p className="text-[var(--accent)] font-medium mb-1">@{displayUser.handle}</p>}
+                <p className="text-gray-500 mb-4">{displayUser.email}</p>
+                
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3">
+                  {displayUser.upiId && (
+                    <div className="inline-flex items-center gap-2 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full text-sm">
+                      <span className="text-gray-500">UPI:</span>
+                      <span className="font-medium font-mono text-gray-900">{displayUser.upiId}</span>
+                    </div>
+                  )}
+                  
+                  {displayUser.uniqueId && (
+                    <div 
+                      className="inline-flex items-center gap-2 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full text-sm cursor-pointer hover:bg-gray-100 transition-colors"
+                      onClick={() => {
+                        navigator.clipboard.writeText(displayUser.uniqueId);
+                        toastSuccess('ID copied to clipboard');
+                      }}
+                    >
+                      <span className="text-gray-500">ID:</span>
+                      <span className="font-medium font-mono text-gray-900">#{displayUser.uniqueId}</span>
+                      <span className="text-[var(--accent)] text-xs ml-1">[copy]</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              <div className="flex flex-col sm:flex-col flex-row gap-3 w-full sm:w-auto mt-4 sm:mt-0 border-t sm:border-t-0 border-gray-100 pt-4 sm:pt-0">
+                <button className="btn btn-secondary w-full sm:w-auto flex-1" onClick={() => setIsEditing(true)}>
+                  Edit Profile
+                </button>
+                <button className="btn btn-secondary w-full sm:w-auto flex-1 text-red-600 border-gray-200 hover:bg-red-50 hover:border-red-200" onClick={handleLogout}>
+                  Logout
+                </button>
+              </div>
+            </>
+          )}
         </div>
-
-        {isEditing ? (
-          <form onSubmit={handleSave} style={{ maxWidth: 320, margin: '0 auto 24px', textAlign: 'left' }}>
-            <div className="form-group">
-              <label>Full Name</label>
-              <input 
-                type="text" 
-                value={name} 
-                onChange={(e) => setName(e.target.value)} 
-                required
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>UPI ID (Optional)</label>
-              <input 
-                type="text" 
-                value={upiId} 
-                onChange={(e) => setUpiId(e.target.value)} 
-                placeholder="username@bank"
-              />
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: 4 }}>
-                Makes it easier for friends to pay you back.
-              </p>
-            </div>
-
-            <div className="form-group">
-              <label>Custom Handle (Optional)</label>
-              <input 
-                type="text" 
-                value={handle} 
-                onChange={(e) => setHandle(e.target.value)} 
-                placeholder="@username"
-              />
-            </div>
-
-            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 24 }}>
-              <button type="submit" className="btn btn-primary btn-sm" disabled={updateProfileMutation.isPending}>
-                {updateProfileMutation.isPending ? 'Saving...' : 'Save Changes'}
-              </button>
-              <button type="button" className="btn btn-secondary btn-sm" onClick={() => { 
-                setIsEditing(false); 
-                setName(displayUser.name); 
-                setUpiId(displayUser.upiId || ''); 
-                setHandle(displayUser.handle || '');
-              }}>
-                Cancel
-              </button>
-            </div>
-          </form>
-        ) : (
-          <div style={{ marginBottom: 32 }}>
-            <h2 style={{ fontSize: '1.25rem', marginBottom: 4 }}>{displayUser.name}</h2>
-            {displayUser.handle && <p style={{ color: 'var(--accent)', fontWeight: 500, fontSize: '0.9375rem', marginBottom: 4 }}>@{displayUser.handle}</p>}
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', marginBottom: 12 }}>{displayUser.email}</p>
-            
-            {displayUser.upiId && (
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'var(--bg-secondary)', padding: '4px 12px', borderRadius: 100, fontSize: '0.8125rem' }}>
-                <span style={{ color: 'var(--text-muted)' }}>UPI:</span>
-                <span style={{ fontWeight: 500, fontFamily: 'var(--font-mono)' }}>{displayUser.upiId}</span>
-              </div>
-            )}
-            
-            {displayUser.uniqueId && (
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'var(--bg-hover)', padding: '4px 12px', borderRadius: 100, fontSize: '0.8125rem', marginTop: 8, cursor: 'pointer' }}
-                   onClick={() => {
-                     navigator.clipboard.writeText(displayUser.uniqueId);
-                     toastSuccess('ID copied to clipboard');
-                   }}>
-                <span style={{ color: 'var(--text-muted)' }}>ID:</span>
-                <span style={{ fontWeight: 600, fontFamily: 'var(--font-mono)' }}>#{displayUser.uniqueId}</span>
-                <span style={{ color: 'var(--accent)', marginLeft: 4 }}>[copy]</span>
-              </div>
-            )}
-          </div>
-        )}
-
-        {!isEditing && (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
-            <button className="btn btn-secondary" onClick={() => setIsEditing(true)}>
-              Edit Profile
-            </button>
-            <button className="btn btn-secondary" style={{ color: 'var(--negative)', borderColor: 'var(--border-default)' }} onClick={handleLogout}>
-              Logout
-            </button>
-          </div>
-        )}
       </div>
 
-      <h3 style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: 12, marginTop: 32, paddingLeft: 4 }}>
+      <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-3 px-1">
         Preferences
       </h3>
-      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid var(--border-default)' }}>
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden divide-y divide-gray-100">
+        
+        <div className="flex justify-between items-center p-4 sm:p-5">
           <div>
-            <div style={{ fontWeight: 500, fontSize: '0.9375rem' }}>Default Currency</div>
-            <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Used for personal expenses</div>
+            <div className="font-medium text-gray-900">Default Currency</div>
+            <div className="text-sm text-gray-500 mt-0.5">Used for personal expenses</div>
           </div>
           <select 
-            className="btn btn-secondary btn-sm" 
+            className="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-[var(--accent)] focus:border-[var(--accent)] block p-2 outline-none"
             value={displayUser.preferences?.currency || 'INR'} 
             onChange={(e) => updatePreference('currency', e.target.value)}
-            style={{ width: 'auto', paddingRight: 32 }}
           >
             <option value="INR">INR (₹)</option>
             <option value="USD">USD ($)</option>
@@ -207,57 +204,38 @@ export default function ProfilePage() {
           </select>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid var(--border-default)' }}>
-          <div>
-            <div style={{ fontWeight: 500, fontSize: '0.9375rem' }}>Email Notifications</div>
-            <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Updates when someone adds an expense</div>
+        <div className="flex justify-between items-center p-4 sm:p-5">
+          <div className="pr-4">
+            <div className="font-medium text-gray-900">Email Notifications</div>
+            <div className="text-sm text-gray-500 mt-0.5">Updates when someone adds an expense</div>
           </div>
-          <label style={{ position: 'relative', display: 'inline-block', width: 44, height: 24 }}>
+          <label className="relative inline-flex items-center cursor-pointer shrink-0">
             <input 
               type="checkbox" 
+              className="sr-only peer"
               checked={displayUser.preferences?.emailNotifications ?? true} 
               onChange={(e) => updatePreference('emailNotifications', e.target.checked)}
-              style={{ opacity: 0, width: 0, height: 0 }} 
             />
-            <span style={{
-              position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0,
-              backgroundColor: (displayUser.preferences?.emailNotifications ?? true) ? 'var(--accent)' : 'var(--border-default)', 
-              borderRadius: 24, transition: '.4s'
-            }}>
-              <span style={{
-                position: 'absolute', content: '""', height: 18, width: 18, left: 3, bottom: 3,
-                backgroundColor: 'white', borderRadius: '50%', transition: '.4s', 
-                transform: (displayUser.preferences?.emailNotifications ?? true) ? 'translateX(20px)' : 'translateX(0px)'
-              }}></span>
-            </span>
+            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--accent)]"></div>
           </label>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px' }}>
-          <div>
-            <div style={{ fontWeight: 500, fontSize: '0.9375rem' }}>Weekly Digest</div>
-            <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Summary of your balances</div>
+        <div className="flex justify-between items-center p-4 sm:p-5">
+          <div className="pr-4">
+            <div className="font-medium text-gray-900">Weekly Digest</div>
+            <div className="text-sm text-gray-500 mt-0.5">Summary of your balances</div>
           </div>
-          <label style={{ position: 'relative', display: 'inline-block', width: 44, height: 24 }}>
+          <label className="relative inline-flex items-center cursor-pointer shrink-0">
             <input 
               type="checkbox" 
+              className="sr-only peer"
               checked={displayUser.preferences?.weeklyDigest ?? false} 
               onChange={(e) => updatePreference('weeklyDigest', e.target.checked)}
-              style={{ opacity: 0, width: 0, height: 0 }} 
             />
-            <span style={{
-              position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0,
-              backgroundColor: (displayUser.preferences?.weeklyDigest ?? false) ? 'var(--accent)' : 'var(--border-default)', 
-              borderRadius: 24, transition: '.4s'
-            }}>
-              <span style={{
-                position: 'absolute', content: '""', height: 18, width: 18, left: 3, bottom: 3,
-                backgroundColor: 'white', borderRadius: '50%', transition: '.4s',
-                transform: (displayUser.preferences?.weeklyDigest ?? false) ? 'translateX(20px)' : 'translateX(0px)'
-              }}></span>
-            </span>
+            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--accent)]"></div>
           </label>
         </div>
+        
       </div>
     </div>
   );
