@@ -1,6 +1,6 @@
 'use client';
 
-import { apiGet, apiPost } from '../client';
+import { apiGet, apiPost, apiPut } from '../client';
 import type {
   GroupExpenseResponse,
   PaginatedResponse,
@@ -28,3 +28,19 @@ export async function createGroupExpense(
 ): Promise<{ id: string; message: string }> {
   return apiPost<{ id: string; message: string }>(`/api/groups/${groupId}/expenses`, data);
 }
+
+export async function getGroupExpense(
+  groupId: string,
+  expenseId: string
+): Promise<GroupExpenseResponse> {
+  return apiGet<GroupExpenseResponse>(`/api/groups/${groupId}/expenses/${expenseId}`);
+}
+
+export async function updateGroupExpense(
+  groupId: string,
+  expenseId: string,
+  data: CreateGroupExpenseInput
+): Promise<{ id: string; message: string }> {
+  return apiPut<{ id: string; message: string }>(`/api/groups/${groupId}/expenses/${expenseId}`, data);
+}
+

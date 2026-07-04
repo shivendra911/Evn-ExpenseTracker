@@ -115,6 +115,21 @@ export default function HouseExpensesTab() {
                     {myContrib === 0 && myShare === 0 && <span style={{ color: 'var(--text-muted)' }}>not involved</span>}
                   </div>
                 </div>
+
+                {/* Edit button — only for the creator, not for settlements */}
+                {!isSettlement && expense.createdById === user?.id && (
+                  <Link
+                    href={`/houses/${houseId}/expenses/${expense.id}/edit`}
+                    className="shrink-0 ml-1 p-2 rounded-lg text-gray-400 hover:text-[var(--accent)] hover:bg-[var(--bg-hover)] transition-colors"
+                    title="Edit expense"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                  </Link>
+                )}
               </div>
             );
           })}

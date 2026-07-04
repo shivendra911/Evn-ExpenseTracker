@@ -18,6 +18,8 @@ export default function FriendProfilePage() {
 
   const [showSettleModal, setShowSettleModal] = useState(false);
   const [settleAmount, setSettleAmount] = useState('');
+  const [settleNote, setSettleNote] = useState('');
+  const [settleDirection, setSettleDirection] = useState<'I_PAID' | 'THEY_PAID'>('I_PAID');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toastSuccess, toastError } = useToast();
 
@@ -54,20 +56,28 @@ export default function FriendProfilePage() {
   const { activity, netBalancePaise } = activityData || { activity: [], netBalancePaise: 0 };
 
   const handleSettleUp = async () => {
-    if (!settleAmount || isNaN(Number(settleAmount)) || Number(settleAmount) <= 0) return;
+    if (!settleAmount || isNaN(Number(settleAmount)) || Number(settleAmount) <= 0) {
+      return toastError('Please enter a valid amount');
+    }
+    if (!settleNote.trim()) {
+      return toastError('Description is required');
+    }
     if (!sharedGroups || sharedGroups.length === 0) return toastError('No shared groups found');
 
     try {
       setIsSubmitting(true);
       await apiPost(`/api/friends/${friendId}/settlements`, {
         amountPaise: Math.round(Number(settleAmount) * 100),
-        groupId: sharedGroups[0].id
+        groupId: sharedGroups[0].id,
+        direction: settleDirection,
+        note: settleNote.trim(),
       });
       setShowSettleModal(false);
       setSettleAmount('');
+      setSettleNote('');
       queryClient.invalidateQueries({ queryKey: ['friendActivity', friendId] });
       queryClient.invalidateQueries({ queryKey: ['allGroupBalances'] });
-      toastSuccess('Payment recorded! Waiting for friend to accept.');
+      toastSuccess('Payment recorded! Waiting for friend to confirm.');
     } catch (err: any) {
       toastError(err.message || 'Failed to record settlement');
     } finally {
@@ -85,6 +95,17 @@ export default function FriendProfilePage() {
     } catch (err: any) {
       toastError(err.message || 'Failed to update status');
     }
+  };
+
+  const openSettleModal = (defaultDirection: 'I_PAID' | 'THEY_PAID') => {
+    setSettleDirection(defaultDirection);
+    if (netBalancePaise !== 0) {
+      setSettleAmount((Math.abs(netBalancePaise) / 100).toString());
+    } else {
+      setSettleAmount('');
+    }
+    setSettleNote('');
+    setShowSettleModal(true);
   };
 
   return (
@@ -127,29 +148,29 @@ export default function FriendProfilePage() {
               <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--negative)' }}>
                 {formatCurrency(Math.abs(netBalancePaise))}
               </div>
-              <div style={{ color: 'var(--negative)', fontWeight: 500, marginBottom: 16 }}>You owe them</div>
-              <button 
-                className="btn" 
-                style={{ 
-                  width: '100%', 
-                  padding: '14px 0', 
-                  fontSize: '1rem',
-                  background: 'var(--positive)',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  borderRadius: 'var(--radius-md)',
-                  fontWeight: 600,
-                  boxShadow: '0 4px 14px 0 rgba(74, 222, 128, 0.39)'
-                }}
-                onClick={() => {
-                  setSettleAmount((Math.abs(netBalancePaise) / 100).toString());
-                  setShowSettleModal(true);
-                }}
-              >
-                Settle Up / Pay
-              </button>
+              <div style={{ color: 'var(--negative)', fontWeight: 500 }}>You owe them</div>
             </>
           )}
+
+          {/* Settle Up button — always visible */}
+          <button 
+            className="btn" 
+            style={{ 
+              width: '100%', 
+              padding: '14px 0', 
+              fontSize: '1rem',
+              background: 'var(--positive)',
+              color: '#FFFFFF',
+              border: 'none',
+              borderRadius: 'var(--radius-md)',
+              fontWeight: 600,
+              boxShadow: '0 4px 14px 0 rgba(74, 222, 128, 0.39)',
+              marginTop: 16,
+            }}
+            onClick={() => openSettleModal(netBalancePaise < 0 ? 'I_PAID' : 'THEY_PAID')}
+          >
+            💸 Settle Up
+          </button>
         </div>
       </div>
 
@@ -160,11 +181,50 @@ export default function FriendProfilePage() {
           background: 'rgba(0,0,0,0.5)', zIndex: 100,
           display: 'flex', alignItems: 'center', justifyContent: 'center'
         }}>
-          <div className="card" style={{ padding: 32, width: '90%', maxWidth: 400 }}>
-            <h3 style={{ marginTop: 0 }}>Settle Up with {friend.name}</h3>
-            <p style={{ color: 'var(--text-secondary)' }}>Record a payment you made outside of the app (e.g. UPI, Cash).</p>
+          <div className="card" style={{ padding: 32, width: '90%', maxWidth: 440 }}>
+            <h3 style={{ marginTop: 0, marginBottom: 4 }}>Settle Up with {friend.name}</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: 24 }}>Record a payment made outside the app (e.g. UPI, Cash, Bank Transfer).</p>
             
-            <div className="form-group" style={{ marginTop: 24 }}>
+            {/* Direction toggle */}
+            <div style={{ display: 'flex', gap: 0, marginBottom: 20, borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--border-default)' }}>
+              <button 
+                className="btn"
+                style={{ 
+                  flex: 1, 
+                  borderRadius: 0, 
+                  border: 'none',
+                  padding: '12px 8px',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  background: settleDirection === 'I_PAID' ? 'var(--accent)' : 'var(--bg-secondary)',
+                  color: settleDirection === 'I_PAID' ? '#FFF' : 'var(--text-secondary)',
+                  transition: 'all 0.2s ease',
+                }}
+                onClick={() => setSettleDirection('I_PAID')}
+              >
+                💰 I paid {friend.name.split(' ')[0]}
+              </button>
+              <button 
+                className="btn"
+                style={{ 
+                  flex: 1, 
+                  borderRadius: 0, 
+                  border: 'none',
+                  borderLeft: '1px solid var(--border-default)',
+                  padding: '12px 8px',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  background: settleDirection === 'THEY_PAID' ? 'var(--accent)' : 'var(--bg-secondary)',
+                  color: settleDirection === 'THEY_PAID' ? '#FFF' : 'var(--text-secondary)',
+                  transition: 'all 0.2s ease',
+                }}
+                onClick={() => setSettleDirection('THEY_PAID')}
+              >
+                💰 {friend.name.split(' ')[0]} paid me
+              </button>
+            </div>
+
+            <div className="form-group">
               <label>Amount (₹)</label>
               <input
                 type="number"
@@ -176,8 +236,21 @@ export default function FriendProfilePage() {
                 autoFocus
               />
             </div>
+
+            <div className="form-group">
+              <label>Description <span style={{ color: 'var(--negative)' }}>*</span></label>
+              <input
+                type="text"
+                value={settleNote}
+                onChange={e => setSettleNote(e.target.value)}
+                placeholder="e.g. UPI payment, Cash at dinner, GPay..."
+              />
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: 4 }}>
+                Required — describe how the payment was made.
+              </p>
+            </div>
             
-            <div style={{ display: 'flex', gap: 12, marginTop: 32 }}>
+            <div style={{ display: 'flex', gap: 12, marginTop: 28 }}>
               <button 
                 className="btn btn-secondary" 
                 style={{ flex: 1 }}
@@ -190,7 +263,7 @@ export default function FriendProfilePage() {
                 className="btn btn-primary" 
                 style={{ flex: 1 }}
                 onClick={handleSettleUp}
-                disabled={isSubmitting}
+                disabled={isSubmitting || !settleNote.trim()}
               >
                 {isSubmitting ? 'Recording...' : 'Record Payment'}
               </button>

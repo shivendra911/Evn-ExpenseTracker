@@ -8,9 +8,10 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: { pa
     const { id: friendId } = await context.params;
     const userId = request.user.userId;
     const body = await request.json();
-    const { amountPaise, groupId } = body;
+    const { amountPaise, groupId, direction, note } = body;
 
     const currentUser = await prisma.user.findUnique({ where: { id: userId }, select: { name: true } });
+    const friendUser = await prisma.user.findUnique({ where: { id: friendId }, select: { name: true } });
 
     if (!amountPaise || amountPaise <= 0) {
       return errorResponse(new Error('Amount must be greater than 0'));
@@ -18,6 +19,10 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: { pa
 
     if (!groupId) {
       return errorResponse(new Error('groupId is required'));
+    }
+
+    if (!note || note.trim().length === 0) {
+      return errorResponse(new Error('Description is required'));
     }
 
     // Verify both users are in the group
@@ -32,28 +37,35 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: { pa
       return errorResponse(new Error('Both users must be in the specified group'));
     }
 
-    // Record the settlement
-    // If I'm paying my friend, status is PENDING (they need to accept).
-    // If my friend paid me (and I'm recording it), status could be ACCEPTED automatically, but let's assume the current user is ALWAYS the one paying (fromUser = userId, toUser = friendId).
-    
+    // Determine who paid whom based on direction
+    // 'I_PAID' = current user paid the friend (default)
+    // 'THEY_PAID' = friend paid the current user
+    const fromUserId = direction === 'THEY_PAID' ? friendId : userId;
+    const toUserId = direction === 'THEY_PAID' ? userId : friendId;
+    const notifyUserId = direction === 'THEY_PAID' ? friendId : friendId;
+
     const settlement = await prisma.settlement.create({
       data: {
         groupId,
-        fromUserId: userId,
-        toUserId: friendId,
+        fromUserId,
+        toUserId,
         amountPaise,
         status: 'PENDING',
         date: new Date(),
-        note: 'Settle Up from Friend Profile'
+        note: note.trim(),
       }
     });
 
-    // Send notification to friend
+    // Notification message depends on direction
+    const notifMessage = direction === 'THEY_PAID'
+      ? `${currentUser?.name || 'Someone'} recorded that ${friendUser?.name || 'you'} paid ₹${(amountPaise / 100).toFixed(2)}. Please confirm.`
+      : `${currentUser?.name || 'Someone'} paid you ₹${(amountPaise / 100).toFixed(2)}. Please accept to update balances.`;
+
     await prisma.notification.create({
       data: {
         userId: friendId,
         type: 'SETTLEMENT_RECORDED',
-        message: `${currentUser?.name || 'Someone'} paid you ₹${(amountPaise / 100).toFixed(2)}. Please accept to update balances.`,
+        message: notifMessage,
         relatedGroupId: groupId,
       }
     });
@@ -63,3 +75,4 @@ export const POST = withAuth(async (request: AuthenticatedRequest, context: { pa
     return errorResponse(error);
   }
 });
+
